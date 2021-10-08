@@ -33,6 +33,8 @@ public class GameCommand implements CommandExecutor, TabExecutor {
             } else {
                 ServerUtilities.sendServerMessage(player, "§cSelecciona una opción");
             }
+        } else if (sender instanceof Player player) {
+            ServerUtilities.sendServerMessage(player, "§cPermisos insuficientes");
         }
         return true;
     }

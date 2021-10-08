@@ -9,3 +9,6 @@ commands:
   game:
     description: Command to manage the game
     usage: /game [option]
+  options:
+    description: Command to manage game options
+    usage: /options [option] [suboption]

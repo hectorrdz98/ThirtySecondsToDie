@@ -20,7 +20,7 @@ public class Event {
     }
 
     public void announce() {
-        ServerUtilities.sendBroadcastMessage("Ha tocado el evento §l" + ServerUtilities.getCategoryColor(this.category) + this.name);
+        ServerUtilities.sendBroadcastMessage("Ha tocado el evento " + ServerUtilities.getCategoryColor(this.category) + "§l" + this.name);
     }
 
 }

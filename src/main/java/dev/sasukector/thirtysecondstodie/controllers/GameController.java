@@ -4,6 +4,7 @@ import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import dev.sasukector.thirtysecondstodie.models.Event;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 
@@ -15,10 +16,11 @@ public class GameController {
     private static GameController instance = null;
     private @Getter int totalEvents = 0;
     private @Getter int remainingSeconds = 30;
-    private @Getter Category currentCategory = Category.NORMAL;
+    private @Getter @Setter Category currentCategory = Category.NORMAL;
     private @Getter Status currentStatus = Status.PAUSED;
     private int timerTaskID = -1;
     private @Getter final List<Event> activeEvents;
+    private @Getter @Setter Event setEvent = null;
 
     public enum Status {
         PAUSED, PLAYING
@@ -27,6 +29,26 @@ public class GameController {
     public enum Category {
         NORMAL, RARE, EPIC, LEGENDARY, GOD;
         private static final Random RANDOM = new Random();
+        public static Category getCategory(String name) {
+            switch (name) {
+                case "normal" -> {
+                    return NORMAL;
+                }
+                case "rare" -> {
+                    return RARE;
+                }
+                case "epic" -> {
+                    return EPIC;
+                }
+                case "legendary" -> {
+                    return LEGENDARY;
+                }
+                case "god" -> {
+                    return GOD;
+                }
+            }
+            return null;
+        }
         public static Category randomCategory()  {
             double random = RANDOM.nextDouble();
             if (random < 0.05) return GOD;
@@ -34,6 +56,9 @@ public class GameController {
             if (random < 0.3) return EPIC;
             if (random < 0.5) return RARE;
             return NORMAL;
+        }
+        public static List<String> getCategories() {
+            return Arrays.asList("normal", "rare", "epic", "legendary", "god");
         }
     }
 
@@ -68,9 +93,15 @@ public class GameController {
 
     public void newEvent() {
         Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), "minecraft:block.note_block.xylophone", 1, 1));
-        List<Event> events = EventsController.getInstance().getEvents().stream()
-                .filter(e -> e.getCategory() == this.currentCategory)
-                .collect(Collectors.toList());
+        List<Event> events = new ArrayList<>();
+        if (setEvent != null) {
+            events.add(setEvent);
+            setEvent = null;
+        } else {
+            events = EventsController.getInstance().getEvents().stream()
+                    .filter(e -> e.getCategory() == this.currentCategory)
+                    .collect(Collectors.toList());
+        }
         Collections.shuffle(events);
         if (events.size() > 0) {
             EventsController.getInstance().handleNewEvent(events.get(0));

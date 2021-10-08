@@ -1,6 +1,7 @@
 package dev.sasukector.thirtysecondstodie;
 
 import dev.sasukector.thirtysecondstodie.commands.GameCommand;
+import dev.sasukector.thirtysecondstodie.commands.OptionsCommand;
 import dev.sasukector.thirtysecondstodie.events.NormalEvents;
 import dev.sasukector.thirtysecondstodie.events.SpawnEvents;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public final class ThirtySecondsToDie extends JavaPlugin {
 
         // Register commands
         Objects.requireNonNull(ThirtySecondsToDie.getInstance().getCommand("game")).setExecutor(new GameCommand());
+        Objects.requireNonNull(ThirtySecondsToDie.getInstance().getCommand("options")).setExecutor(new OptionsCommand());
     }
 
     @Override

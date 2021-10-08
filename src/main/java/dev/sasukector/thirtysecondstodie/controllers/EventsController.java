@@ -10,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -25,8 +26,9 @@ public class EventsController {
     private final Random random;
 
     public enum EventType {
-        MINI_ZOMBIES_NORMAL, ZOMBIE_NORMAL, SKELETON_NORMAL, CREEPER_NORMAL,
-        SLIMES_NORMAL, ANVIL_NORMAL, COBWEB_NORMAL, EFFECT_NORMAL
+        // Normal events
+        MINI_ZOMBIES_NORMAL, ZOMBIE_NORMAL, SKELETON_NORMAL, CREEPER_NORMAL, SLIMES_NORMAL, ANVIL_NORMAL,
+        COBWEB_NORMAL, EFFECT_NORMAL, DROP_HANDED_NORMAL, SKIP_DAY_NORMAL, RANDOM_TP_NORMAL
     }
 
     public static EventsController getInstance() {
@@ -52,6 +54,9 @@ public class EventsController {
         this.events.add(new Event(EventType.ANVIL_NORMAL, "Headshot"  , GameController.Category.NORMAL, 0));
         this.events.add(new Event(EventType.COBWEB_NORMAL, "Mini Trampa"  , GameController.Category.NORMAL, 0));
         this.events.add(new Event(EventType.EFFECT_NORMAL, "Efecto Básico Random"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.DROP_HANDED_NORMAL, "Tirar Item en la Mano"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.SKIP_DAY_NORMAL, "Adios Día..."  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.RANDOM_TP_NORMAL, "TP Random"  , GameController.Category.NORMAL, 0));
     }
 
     public void handleNewEvent(Event event) {
@@ -66,7 +71,7 @@ public class EventsController {
     private void applyEventInstantEffect(Event event) {
         switch (event.getEventType()) {
             case MINI_ZOMBIES_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
-                for (int i = 0; i < 3; ++i) {
+                for (int i = 0; i < 2; ++i) {
                     Zombie miniZombie = (Zombie) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
                     miniZombie.customName(Component.text("Zombie Facha", TextColor.color(0xDF7CFF)));
                     miniZombie.setBaby();
@@ -74,14 +79,14 @@ public class EventsController {
                 }
             });
             case ZOMBIE_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
-                for (int i = 0; i < random.nextInt(3) + 3; ++i) {
+                for (int i = 0; i < random.nextInt(3) + 1; ++i) {
                     Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
                     entity.customName(Component.text("XR-Zombie", TextColor.color(0x6BD3FF)));
                 }
 
             });
             case SKELETON_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
-                for (int i = 0; i < random.nextInt(3) + 3; ++i) {
+                for (int i = 0; i < random.nextInt(3) + 1; ++i) {
                     Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
                     entity.customName(Component.text("Esqueleto Vegano", TextColor.color(0x37FF56)));
                 }
@@ -116,6 +121,14 @@ public class EventsController {
                     case 2 -> p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 600, 0));
                     case 3 -> p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 600, 0));
                     default -> p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 600, 0));
+                }
+            });
+            case DROP_HANDED_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
+                ItemStack item = p.getInventory().getItemInMainHand();
+                if (item.getType() != Material.AIR) {
+                    p.getWorld().dropItemNaturally(p.getLocation(), item);
+                    p.getInventory().setItemInMainHand(null);
+                    p.updateInventory();
                 }
             });
         }

@@ -30,7 +30,7 @@ public class EventsController {
         COBWEB_NORMAL, EFFECT_NORMAL, DROP_HANDED_NORMAL, SKIP_DAY_NORMAL, RANDOM_TP_NORMAL,
         // Rare events
         EFFECT_RARE, BUNNIES_RARE, ILLUSIONER_RARE, SHUFFLE_RARE, HUNGER_RARE, CREEPER_RARE, NO_CHESTS_RARE,
-        VINDICATOR_RARE, FIRE_RARE, PUFFER_FISH_RARE, TRAP_RARE, SAND_RARE, LIQUIDS_RARE, DURABILITY_RARE
+        VINDICATOR_RARE, FIRE_RARE, PUFFER_FISH_RARE, TRAP_RARE, SAND_RARE, LIQUIDS_RARE
     }
 
     public static EventsController getInstance() {
@@ -74,7 +74,6 @@ public class EventsController {
         this.events.add(new Event(EventType.TRAP_RARE, "¿Sin salida?", GameController.Category.RARE, 0));
         this.events.add(new Event(EventType.SAND_RARE, "¿Lag?", GameController.Category.RARE, 0));
         this.events.add(new Event(EventType.LIQUIDS_RARE, "Juro que aquí había otra cosa", GameController.Category.RARE, 0));
-        this.events.add(new Event(EventType.DURABILITY_RARE, "Se gastan rápido", GameController.Category.RARE, 0));
     }
 
     public void handleNewEvent(Event event) {

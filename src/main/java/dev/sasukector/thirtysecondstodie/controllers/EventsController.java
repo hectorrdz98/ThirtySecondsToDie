@@ -105,15 +105,17 @@ public class EventsController {
             });
             case ANVIL_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().spawnFallingBlock(p.getLocation().add(0, 10, 0), Material.ANVIL.createBlockData()));
             case COBWEB_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
-                p.getWorld().getBlockAt(p.getLocation().add(0, -1, 0)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(1, -1, 0)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(0, -1, 1)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(-1, -1, 0)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(0, -1, -1)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(1, -1, 1)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(1, -1, -1)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(-1, -1, 1)).setType(Material.COBWEB);
-                p.getWorld().getBlockAt(p.getLocation().add(-1, -1, -1)).setType(Material.COBWEB);
+                List<int[]> locations = Arrays.asList(
+                        new int[]{0, 0}, new int[]{1, 0}, new int[]{0, 1},
+                        new int[]{-1, 0}, new int[]{0, -1}, new int[]{1, 1},
+                        new int[]{1, -1}, new int[]{-1, 1}, new int[]{-1, -1}
+                );
+                for (int[] l : locations) {
+                    Block block = p.getWorld().getBlockAt(p.getLocation().add(l[0], -1, l[1]));
+                    if (block.getType() != Material.END_PORTAL_FRAME && block.getType() != Material.BEDROCK) {
+                        block.setType(Material.COBWEB);
+                    }
+                }
             });
             case EFFECT_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 switch (random.nextInt(5)) {

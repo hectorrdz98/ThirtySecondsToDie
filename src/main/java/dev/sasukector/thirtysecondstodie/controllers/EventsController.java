@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -31,7 +33,11 @@ public class EventsController {
         COBWEB_NORMAL, EFFECT_NORMAL, DROP_HANDED_NORMAL, SKIP_DAY_NORMAL, RANDOM_TP_NORMAL,
         // Rare events
         EFFECT_RARE, BUNNIES_RARE, ILLUSIONER_RARE, SHUFFLE_RARE, HUNGER_RARE, CREEPER_RARE, NO_CHESTS_RARE,
-        VINDICATOR_RARE, FIRE_RARE, PUFFER_FISH_RARE, TRAP_RARE, SAND_RARE, LIQUIDS_RARE
+        VINDICATOR_RARE, FIRE_RARE, PUFFER_FISH_RARE, TRAP_RARE, SAND_RARE, LIQUIDS_RARE,
+        // Epic events
+        UHC_MODE_EPIC, BAD_OMEN_EPIC, WITHER_SKELETONS_EPIC, VEX_EPIC, ENDERMAN_EPIC, VOID_EPIC,
+        ANVIL_EPIC, WATER_DROP_EPIC, NO_MOVE_EPIC, FLOOR_LAVA_EPIC, DROWNED_EPIC, SNIPER_EPIC,
+        SHADOUNE_EPIC, ONLY_BOW_EPIC, SILVER_FISH_EPIC
     }
 
     public static EventsController getInstance() {
@@ -75,6 +81,23 @@ public class EventsController {
         this.events.add(new Event(EventType.TRAP_RARE, "¿Sin salida?", GameController.Category.RARE, 0));
         this.events.add(new Event(EventType.SAND_RARE, "¿Lag?", GameController.Category.RARE, 0));
         this.events.add(new Event(EventType.LIQUIDS_RARE, "Juro que aquí había otra cosa", GameController.Category.RARE, 0));
+
+        // EPIC
+        this.events.add(new Event(EventType.UHC_MODE_EPIC, "Un UHC...", GameController.Category.EPIC, 180));
+        this.events.add(new Event(EventType.BAD_OMEN_EPIC, "¿Pillagers? Hm...", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.WITHER_SKELETONS_EPIC, "Almas del Nether", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.VEX_EPIC, "Moscas", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.ENDERMAN_EPIC, "Guardianes del bosque", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.VOID_EPIC, "Una pequeña grieta", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.ANVIL_EPIC, "Mucho hierro", GameController.Category.EPIC, 30));
+        this.events.add(new Event(EventType.WATER_DROP_EPIC, "¡WaterDrop!", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.NO_MOVE_EPIC, "Shh... No te muevas", GameController.Category.EPIC, 10));
+        this.events.add(new Event(EventType.FLOOR_LAVA_EPIC, "¿Lava? ¿¡LAVA!?", GameController.Category.EPIC, 60));
+        this.events.add(new Event(EventType.DROWNED_EPIC, "Finalmente, tridentes...", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.SNIPER_EPIC, "No me dispares... por favor", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.SHADOUNE_EPIC, "¿1/2 de vida?", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.ONLY_BOW_EPIC, "Solo sé usar el arco", GameController.Category.EPIC, 120));
+        this.events.add(new Event(EventType.SILVER_FISH_EPIC, "Pequeños pero molestos", GameController.Category.EPIC, 0));
     }
 
     public void handleNewEvent(Event event) {
@@ -267,6 +290,25 @@ public class EventsController {
                         }
                     }
                 }
+            });
+            case BAD_OMEN_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Block bedHead = p.getLocation().add(0, 10, 0).getBlock();
+                Block bedFoot = p.getLocation().add(1, 10, 0).getBlock();
+                BlockFace facing = bedHead.getFace(bedFoot);
+                if (facing != null) {
+                    for (Bed.Part part : Bed.Part.values()) {
+                        if (bedHead.getType() != Material.END_PORTAL_FRAME && bedHead.getType() != Material.BEDROCK) {
+                            bedHead.setBlockData(Bukkit.createBlockData(Material.WHITE_BED, (data) -> {
+                                ((Bed) data).setPart(part);
+                                ((Bed) data).setFacing(facing);
+                            }));
+                        }
+                        bedHead = bedHead.getRelative(facing.getOppositeFace());
+                    }
+                }
+                p.getWorld().spawnEntity(p.getLocation().add(0, 11, 0), EntityType.VILLAGER);
+                p.getWorld().spawnEntity(p.getLocation().add(0, 11, 0), EntityType.VILLAGER);
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 99999, 4));
             });
         }
     }

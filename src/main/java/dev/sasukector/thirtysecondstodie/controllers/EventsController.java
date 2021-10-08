@@ -238,6 +238,23 @@ public class EventsController {
                     }
                 }
             });
+            case LIQUIDS_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                int baseX = p.getLocation().getBlockX();
+                int baseY = p.getLocation().getBlockY();
+                int baseZ = p.getLocation().getBlockZ();
+                for (int i = baseX - 5; i <= baseX + 5; ++i) {
+                    for (int j = baseY - 5; j <= baseY + 5; ++j) {
+                        for (int k = baseZ - 5; k <= baseZ + 5; ++k) {
+                            Block block = p.getWorld().getBlockAt(i, j, k);
+                            if (block.getType() == Material.WATER) {
+                                block.setType(Material.LAVA);
+                            } else if (block.getType() == Material.LAVA) {
+                                block.setType(Material.WATER);
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 

@@ -46,17 +46,17 @@ public class EventsController {
 
     private void createEvents() {
         // NORMAL
-        this.events.add(new Event(EventType.MINI_ZOMBIES_NORMAL, "Los Blancos", GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.ZOMBIE_NORMAL, "XR-Zombies", GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.MINI_ZOMBIES_NORMAL, "Fino señores", GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.ZOMBIE_NORMAL, "Androides", GameController.Category.NORMAL, 0));
         this.events.add(new Event(EventType.SKELETON_NORMAL, "Veganismo", GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.CREEPER_NORMAL, "Creeper Suicida", GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.SLIMES_NORMAL, "Espíritu Gelatinoso"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.CREEPER_NORMAL, "Ser explosivo", GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.SLIMES_NORMAL, "Gelatina que levita"  , GameController.Category.NORMAL, 0));
         this.events.add(new Event(EventType.ANVIL_NORMAL, "Headshot"  , GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.COBWEB_NORMAL, "Mini Trampa"  , GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.EFFECT_NORMAL, "Efecto Básico Random"  , GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.DROP_HANDED_NORMAL, "Tirar Item en la Mano"  , GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.SKIP_DAY_NORMAL, "Adios Día..."  , GameController.Category.NORMAL, 0));
-        this.events.add(new Event(EventType.RANDOM_TP_NORMAL, "TP Random"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.COBWEB_NORMAL, "Mini trampa"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.EFFECT_NORMAL, "No me siento bien"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.DROP_HANDED_NORMAL, "Mano de mantequilla"  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.SKIP_DAY_NORMAL, "Adios día..."  , GameController.Category.NORMAL, 0));
+        this.events.add(new Event(EventType.RANDOM_TP_NORMAL, "¿Dónde estoy?"  , GameController.Category.NORMAL, 0));
     }
 
     public void handleNewEvent(Event event) {

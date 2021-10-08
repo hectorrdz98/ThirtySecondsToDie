@@ -88,9 +88,11 @@ public class OptionsCommand implements CommandExecutor, TabExecutor {
     }
 
     public List<String> validSubOptions(String option) {
+        GameController.Category category = GameController.getInstance().getCurrentCategory();
         List<String> valid = new ArrayList<>();
         switch (option.toLowerCase()) {
             case "event" -> valid = EventsController.getInstance().getEvents().stream()
+                                        .filter(e -> e.getCategory() == category)
                                         .map(Event::getName).collect(Collectors.toList());
             case "category" -> valid = GameController.Category.getCategories();
         }

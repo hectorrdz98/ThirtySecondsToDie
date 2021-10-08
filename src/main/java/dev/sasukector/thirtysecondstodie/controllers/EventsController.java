@@ -203,6 +203,29 @@ public class EventsController {
                 creeper.setPowered(true);
                 Objects.requireNonNull(creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
             });
+            case VINDICATOR_RARE -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().spawnEntity(p.getLocation(), EntityType.VINDICATOR));
+            case TRAP_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                List<int[]> glassLoc = Arrays.asList(
+                        new int[]{1, 0, 0}, new int[]{-1, 0, 0}, new int[]{0, 0, 1}, new int[]{0, 0, -1},
+                        new int[]{1, 1, 0}, new int[]{-1, 1, 0}, new int[]{0, 1, 1}, new int[]{0, 1, -1},
+                        new int[]{0, 2, 0}, new int[]{0, -1, 0}
+                );
+                for (int[] l : glassLoc) {
+                    Block block = p.getWorld().getBlockAt(p.getLocation().add(l[0], l[1], l[2]));
+                    if (block.getType() != Material.END_PORTAL_FRAME && block.getType() != Material.BEDROCK) {
+                        block.setType(Material.GLASS);
+                    }
+                }
+                Block block = p.getWorld().getBlockAt(p.getLocation());
+                if (block.getType() != Material.END_PORTAL_FRAME && block.getType() != Material.BEDROCK) {
+                    block.setType(Material.WATER);
+                }
+                block = p.getWorld().getBlockAt(p.getLocation().add(0, 1, 0));
+                if (block.getType() != Material.END_PORTAL_FRAME && block.getType() != Material.BEDROCK) {
+                    block.setType(Material.WATER);
+                }
+
+            });
         }
     }
 

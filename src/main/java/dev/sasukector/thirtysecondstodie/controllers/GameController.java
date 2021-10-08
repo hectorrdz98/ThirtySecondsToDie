@@ -29,10 +29,10 @@ public class GameController {
         private static final Random RANDOM = new Random();
         public static Category randomCategory()  {
             double random = RANDOM.nextDouble();
-            if (random < 0.1) return GOD;
-            if (random < 0.2) return LEGENDARY;
-            if (random < 0.4) return EPIC;
-            if (random < 0.7) return RARE;
+            if (random < 0.05) return GOD;
+            if (random < 0.15) return LEGENDARY;
+            if (random < 0.3) return EPIC;
+            if (random < 0.5) return RARE;
             return NORMAL;
         }
     }

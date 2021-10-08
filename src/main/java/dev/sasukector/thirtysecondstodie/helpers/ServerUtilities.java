@@ -13,7 +13,7 @@ public class ServerUtilities {
     private final static @Getter MiniMessage miniMessage = MiniMessage.get();
 
     public static Component getPluginNameColored() {
-        return miniMessage.parse("<bold><gradient:#DC3636:#8B1919>☠ Bits</gradient></bold>");
+        return miniMessage.parse("<bold><gradient:#DC3636:#8B1919>30 ☠ segundos</gradient></bold>");
     }
 
     public static String getCategoryStyle(GameController.Category category) {
@@ -26,6 +26,27 @@ public class ServerUtilities {
             case GOD -> result = "§eDIVINA";
         }
         return result;
+    }
+
+    public static String getCategoryColor(GameController.Category category) {
+        switch (category) {
+            case NORMAL -> {
+                return "§7";
+            }
+            case RARE -> {
+                return "§2";
+            }
+            case EPIC -> {
+                return "§d";
+            }
+            case LEGENDARY -> {
+                return "§b";
+            }
+            case GOD -> {
+                return "§e";
+            }
+        }
+        return "";
     }
 
     public static void sendBroadcastMessage(String message) {

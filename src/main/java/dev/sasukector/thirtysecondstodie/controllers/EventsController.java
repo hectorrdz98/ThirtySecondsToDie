@@ -226,6 +226,18 @@ public class EventsController {
                 }
 
             });
+            case SAND_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 5; ++i) {
+                    for (int j = -i; j <= i; ++j) {
+                        for (int k = -i; k <= i; ++k) {
+                            Block block = p.getWorld().getBlockAt(p.getLocation().add(j, 5 + i, k));
+                            if (block.getType() != Material.END_PORTAL_FRAME && block.getType() != Material.BEDROCK) {
+                                block.setType(Material.SAND);
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.sasukector.thirtysecondstodie.controllers;
 
+import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.models.Event;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -88,6 +89,17 @@ public class EventsController {
         }
     }
 
+    public void timedEventController() {
+        List<Event> events = GameController.getInstance().getActiveEvents().stream().toList();
+        for (Event event : events) {
+            event.setMissingTime(event.getMissingTime() - 1);
+            if (event.getMissingTime() < 0) {
+                GameController.getInstance().getActiveEvents().remove(event);
+            }
+            applyEventTimedEffect(event);
+        }
+    }
+
     private void applyEventInstantEffect(Event event) {
         switch (event.getEventType()) {
             case MINI_ZOMBIES_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
@@ -103,7 +115,6 @@ public class EventsController {
                     Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
                     entity.customName(Component.text("XR-Zombie", TextColor.color(0x6BD3FF)));
                 }
-
             });
             case SKELETON_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < random.nextInt(3) + 1; ++i) {
@@ -260,13 +271,15 @@ public class EventsController {
         }
     }
 
-    public void timedEventController() {
-        List<Event> events = GameController.getInstance().getActiveEvents().stream().toList();
-        for (Event event : events) {
-            event.setMissingTime(event.getMissingTime() - 1);
-            if (event.getMissingTime() < 0) {
-                GameController.getInstance().getActiveEvents().remove(event);
-            }
+    private void applyEventTimedEffect(Event event) {
+        switch (event.getEventType()) {
+            case FIRE_RARE -> Bukkit.getOnlinePlayers().forEach(p -> p.setFireTicks(100));
+            case PUFFER_FISH_RARE -> Bukkit.getOnlinePlayers().forEach(p -> Bukkit.getScheduler().runTask(ThirtySecondsToDie.getInstance(), () -> {
+                for (int i = 0; i < random.nextInt(3) + 1; ++i) {
+                    p.getWorld().spawnEntity(p.getLocation()
+                            .add(random.nextInt(3), 10, random.nextInt(3)), EntityType.PUFFERFISH);
+                }
+            }));
         }
     }
 

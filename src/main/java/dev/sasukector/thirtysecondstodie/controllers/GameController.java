@@ -86,6 +86,7 @@ public class GameController {
 
     public void stopGame() {
         this.currentStatus = Status.PAUSED;
+        this.activeEvents.clear();
         Bukkit.getScheduler().cancelTask(this.timerTaskID);
         ServerUtilities.sendBroadcastMessage(ServerUtilities.getMiniMessage().parse("<bold><gradient:#B57BA6:#7D5572>Se ha detenido el juego</gradient></bold>"));
         Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), "minecraft:block.note_block.bell", 1, 1));
@@ -113,8 +114,9 @@ public class GameController {
 
     public void runTimer() {
         this.timerTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(ThirtySecondsToDie.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(ThirtySecondsToDie.getInstance(), () -> EventsController.getInstance().timedEventController());
             this.remainingSeconds--;
-            if (this.remainingSeconds <= 0) {
+            if (this.remainingSeconds < 0) {
                 this.totalEvents++;
                 this.remainingSeconds = 30;
                 newEvent();

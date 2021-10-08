@@ -3,13 +3,13 @@ package dev.sasukector.thirtysecondstodie.controllers;
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.helpers.FastBoard;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
+import dev.sasukector.thirtysecondstodie.models.Event;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BoardController {
 
@@ -46,14 +46,27 @@ public class BoardController {
 
             board.updateTitle("§4§l30 §c§l☠ §4§lsegundos");
             if (GameController.getInstance().getCurrentStatus() == GameController.Status.PLAYING) {
-                board.updateLines(
-                        "",
-                        "Jugador: §6" + player.getName(),
-                        "Muertes: §c" + player.getStatistic(Statistic.DEATHS),
-                        "",
-                        "Próximo evento: §6" + GameController.getInstance().getRemainingSeconds() + "s",
-                        "Categoría: " + ServerUtilities.getCategoryStyle(GameController.getInstance().getCurrentCategory())
-                );
+                List<String> lines = new ArrayList<>();
+                lines.add("");
+                lines.add("Jugador: §6" + player.getName());
+                lines.add("Muertes: §c" + player.getStatistic(Statistic.DEATHS));
+                lines.add("");
+                lines.add("Próximo evento: §6" + GameController.getInstance().getRemainingSeconds() + "s");
+                lines.add("Categoría: " + ServerUtilities.getCategoryStyle(GameController.getInstance().getCurrentCategory()));
+                if (GameController.getInstance().getActiveEvents().size() > 0) {
+                    lines.add("");
+                    lines.add("Eventos activos: ");
+                    for (Event event : GameController.getInstance().getActiveEvents().stream()
+                            .sorted(Comparator.comparingInt(Event::getMissingTime))
+                            .limit(3).collect(Collectors.toList())) {
+                        lines.add(ServerUtilities.getCategoryColor(event.getCategory()) + event.getName() + " §7" +
+                                event.getMissingTime() + "s");
+                    }
+                    if (GameController.getInstance().getActiveEvents().size() > 3) {
+                        lines.add("+" + (GameController.getInstance().getActiveEvents().size() - 3) + " eventos extra");
+                    }
+                }
+                board.updateLines(lines);
             } else {
                 board.updateLines(
                         "",

@@ -79,7 +79,10 @@ public class EventsController {
     public void handleNewEvent(Event event) {
         event.announce();
         if (event.getDuration() != 0) {
-            GameController.getInstance().getActiveEvents().add(event);
+            event.setMissingTime(event.getDuration());
+            if (!GameController.getInstance().getActiveEvents().contains(event)) {
+                GameController.getInstance().getActiveEvents().add(event);
+            }
         } else {
             applyEventInstantEffect(event);
         }
@@ -254,6 +257,16 @@ public class EventsController {
                     }
                 }
             });
+        }
+    }
+
+    public void timedEventController() {
+        List<Event> events = GameController.getInstance().getActiveEvents().stream().toList();
+        for (Event event : events) {
+            event.setMissingTime(event.getMissingTime() - 1);
+            if (event.getMissingTime() < 0) {
+                GameController.getInstance().getActiveEvents().remove(event);
+            }
         }
     }
 

@@ -2,11 +2,14 @@ package dev.sasukector.thirtysecondstodie.controllers;
 
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
+import dev.sasukector.thirtysecondstodie.models.Event;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class GameController {
@@ -17,6 +20,7 @@ public class GameController {
     private @Getter Category currentCategory = Category.NORMAL;
     private @Getter Status currentStatus = Status.PAUSED;
     private int timerTaskID = -1;
+    private @Getter final List<Event> activeEvents;
 
     public enum Status {
         PAUSED, PLAYING
@@ -24,11 +28,14 @@ public class GameController {
 
     public enum Category {
         NORMAL, RARE, EPIC, LEGENDARY, GOD;
-        private static final List<Category> VALUES = List.of(values());
-        private static final int SIZE = VALUES.size();
         private static final Random RANDOM = new Random();
         public static Category randomCategory()  {
-            return VALUES.get(RANDOM.nextInt(SIZE));
+            double random = RANDOM.nextDouble();
+            if (random < 0.1) return GOD;
+            if (random < 0.2) return LEGENDARY;
+            if (random < 0.4) return EPIC;
+            if (random < 0.7) return RARE;
+            return NORMAL;
         }
     }
 
@@ -39,8 +46,13 @@ public class GameController {
         return instance;
     }
 
+    public GameController() {
+        this.activeEvents = new ArrayList<>();
+    }
+
     public void startGame() {
         this.currentStatus = Status.PLAYING;
+        this.activeEvents.clear();
         ServerUtilities.sendBroadcastMessage(ServerUtilities.getMiniMessage().parse("<bold><gradient:#9FE69E:#6FA16E>Ha iniciado el juego</gradient></bold>"));
         Bukkit.getOnlinePlayers().forEach(p -> {
             p.playSound(p.getLocation(), "minecraft:block.note_block.bell", 1, 1);
@@ -57,8 +69,16 @@ public class GameController {
     }
 
     public void newEvent() {
-        this.currentCategory = Category.randomCategory();
         Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), "minecraft:block.note_block.xylophone", 1, 1));
+        Optional<Event> newEvent = EventsController.getInstance().getEvents().stream()
+                .filter(e -> e.getCategory() == this.currentCategory)
+                .findFirst();
+        if (newEvent.isPresent()) {
+            EventsController.getInstance().handleNewEvent(newEvent.get());
+        } else {
+            ServerUtilities.sendBroadcastMessage("§cNo hay eventos registrados para la categoría: " + ServerUtilities.getCategoryStyle(this.currentCategory));
+        }
+        this.currentCategory = Category.randomCategory();
     }
 
     public void runTimer() {

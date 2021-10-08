@@ -44,7 +44,7 @@ public class BoardController {
             Player player = Bukkit.getPlayer(uuid);
             assert player != null;
 
-            board.updateTitle("§c§l☠ §4§lBits");
+            board.updateTitle("§4§l30 §c§l☠ §4§lsegundos");
             if (GameController.getInstance().getCurrentStatus() == GameController.Status.PLAYING) {
                 board.updateLines(
                         "",

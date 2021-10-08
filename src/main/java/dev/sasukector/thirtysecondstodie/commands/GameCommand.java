@@ -28,10 +28,10 @@ public class GameCommand implements CommandExecutor, TabExecutor {
                         case "stop" -> GameController.getInstance().stopGame();
                     }
                 } else {
-                    ServerUtilities.sendServerMessage(player, "§cPlease select a valid option");
+                    ServerUtilities.sendServerMessage(player, "§cSelecciona una opción válida");
                 }
             } else {
-                ServerUtilities.sendServerMessage(player, "§cYou need to specify an option");
+                ServerUtilities.sendServerMessage(player, "§cSelecciona una opción");
             }
         }
         return true;

@@ -5,8 +5,10 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
@@ -14,10 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EventsController {
 
@@ -129,6 +130,27 @@ public class EventsController {
                     p.getWorld().dropItemNaturally(p.getLocation(), item);
                     p.getInventory().setItemInMainHand(null);
                     p.updateInventory();
+                }
+            });
+            case SKIP_DAY_NORMAL -> Bukkit.getWorlds().forEach(w -> w.setTime(18000));
+            case RANDOM_TP_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Location newLocation = p.getLocation();
+                newLocation.add(random.nextInt(20) - 10, 0, random.nextInt(20) - 10);
+                List<Integer> locations = Stream.iterate(2, n -> n + 1).limit(100).collect(Collectors.toList());
+                Collections.shuffle(locations);
+                for (int y : locations) {
+                    newLocation.setY(y);
+                    Block cBlock = newLocation.getBlock();
+                    Block tBlock = newLocation.add(0, 1, 0).getBlock();
+                    Block lBlock = newLocation.add(0, -2, 0).getBlock();
+                    if ((cBlock.getType() == Material.AIR || cBlock.getType() == Material.WATER) &&
+                            (tBlock.getType() == Material.AIR || tBlock.getType() == Material.WATER) &&
+                            (lBlock.getType().isSolid() || lBlock.getType() == Material.WATER)
+                    ) {
+                        newLocation.setY(y);
+                        p.teleport(newLocation);
+                        break;
+                    }
                 }
             });
         }

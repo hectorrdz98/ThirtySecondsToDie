@@ -7,10 +7,8 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameController {
 
@@ -70,11 +68,12 @@ public class GameController {
 
     public void newEvent() {
         Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), "minecraft:block.note_block.xylophone", 1, 1));
-        Optional<Event> newEvent = EventsController.getInstance().getEvents().stream()
+        List<Event> events = EventsController.getInstance().getEvents().stream()
                 .filter(e -> e.getCategory() == this.currentCategory)
-                .findFirst();
-        if (newEvent.isPresent()) {
-            EventsController.getInstance().handleNewEvent(newEvent.get());
+                .collect(Collectors.toList());
+        Collections.shuffle(events);
+        if (events.size() > 0) {
+            EventsController.getInstance().handleNewEvent(events.get(0));
         } else {
             ServerUtilities.sendBroadcastMessage("§cNo hay eventos registrados para la categoría: " + ServerUtilities.getCategoryStyle(this.currentCategory));
         }

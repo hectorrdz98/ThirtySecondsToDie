@@ -2,6 +2,7 @@ package dev.sasukector.thirtysecondstodie.events;
 
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.controllers.EventsController;
+import dev.sasukector.thirtysecondstodie.controllers.GameController;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +10,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -54,6 +57,28 @@ public class LegendaryEvents implements Listener {
             event.setCancelled(true);
             skeleton.setVisualFire(false);
             skeleton.setFireTicks(0);
+        }
+        if (event.getEntity() instanceof LivingEntity entity && entity.getType() != EntityType.PLAYER) {
+            if (GameController.getInstance().getActiveEvents().stream()
+                    .anyMatch(e -> e.getEventType() == EventsController.EventType.INMORTAL_MOBS_LEG)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (GameController.getInstance().getActiveEvents().stream()
+                .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (GameController.getInstance().getActiveEvents().stream()
+                .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
+            event.setCancelled(true);
         }
     }
 

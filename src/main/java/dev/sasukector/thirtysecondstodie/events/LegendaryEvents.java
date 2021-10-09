@@ -1,19 +1,13 @@
 package dev.sasukector.thirtysecondstodie.events;
 
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
-import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Phantom;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class LegendaryEvents implements Listener {
 
@@ -45,6 +39,13 @@ public class LegendaryEvents implements Listener {
             event.setCancelled(true);
             phantom.setVisualFire(false);
             phantom.setFireTicks(0);
+        }
+        if (event.getEntity() instanceof Skeleton skeleton && skeleton.getScoreboardTags().contains("custom_skeleton") &&
+                (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK ||
+                        event.getCause() == EntityDamageEvent.DamageCause.FIRE)) {
+            event.setCancelled(true);
+            skeleton.setVisualFire(false);
+            skeleton.setFireTicks(0);
         }
     }
 

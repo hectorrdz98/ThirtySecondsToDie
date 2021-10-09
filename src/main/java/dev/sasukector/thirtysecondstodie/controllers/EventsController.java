@@ -419,6 +419,7 @@ public class EventsController {
             case PHANTOM_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
                 Phantom phantom = (Phantom) p.getWorld().spawnEntity(p.getLocation().add(0, 20, 0), EntityType.PHANTOM);
                 phantom.getScoreboardTags().add("custom_phantom");
+                phantom.setPersistent(true);
                 phantom.customName(Component.text("Espiritu Rojo", TextColor.color(0xA61A2A)));
                 phantom.setSize(30);
                 Objects.requireNonNull(phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(100);
@@ -434,6 +435,19 @@ public class EventsController {
                         }
                     }
                 }.runTaskTimer(ThirtySecondsToDie.getInstance(), 0L, 20L);
+            });
+            case SKELETON_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 50; ++i) {
+                    Skeleton skeleton = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                    skeleton.getScoreboardTags().add("custom_skeleton");
+                    skeleton.customName(Component.text("Esqueleto con Camisa", TextColor.color(0xA67493)));
+                    skeleton.getEquipment().setItemInMainHand(null);
+                    skeleton.getEquipment().setHelmet(null);
+                    skeleton.getEquipment().setChestplate(null);
+                    skeleton.getEquipment().setLeggings(null);
+                    skeleton.getEquipment().setBoots(null);
+                    skeleton.setCanPickupItems(false);
+                }
             });
         }
     }

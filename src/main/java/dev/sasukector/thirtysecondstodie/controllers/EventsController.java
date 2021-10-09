@@ -39,7 +39,11 @@ public class EventsController {
         // Epic events
         UHC_MODE_EPIC, BAD_OMEN_EPIC, WITHER_SKELETONS_EPIC, VEX_EPIC, ENDERMAN_EPIC, VOID_EPIC,
         ANVIL_EPIC, WATER_DROP_EPIC, NO_MOVE_EPIC, FLOOR_LAVA_EPIC, DROWNED_EPIC, SNIPER_EPIC,
-        SHADOUNE_EPIC, ONLY_BOW_EPIC, SILVER_FISH_EPIC
+        SHADOUNE_EPIC, ONLY_BOW_EPIC, SILVER_FISH_EPIC,
+        // Legendary events
+        THUNDERS_LEG, INMORTAL_MOBS_LEG, GHAST_LEG, PHANTOM_LEG, SKELETON_LEG, TP_LEG, ADVENTURE_LEG,
+        TOTEM_LEG, ARMOR_LEG, LV_ZOMBIES_LEG, LV_SKELETONS_LEG, LV_SPIDERS_LEG, BLOCKS_RANDOM_LEG,
+        BLOCKS_EXPLODE_LEG, JESUS_LEG
     }
 
     public static EventsController getInstance() {
@@ -100,6 +104,23 @@ public class EventsController {
         this.events.add(new Event(EventType.SHADOUNE_EPIC, "¿1/2 de vida? ¿Shadoune?", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.ONLY_BOW_EPIC, "Solo sé usar el arco", GameController.Category.EPIC, 120));
         this.events.add(new Event(EventType.SILVER_FISH_EPIC, "Pequeños pero molestos", GameController.Category.EPIC, 0));
+
+        // LEGENDARY
+        this.events.add(new Event(EventType.THUNDERS_LEG, "¿El rasho?", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.INMORTAL_MOBS_LEG, "Uy... parece que no mueren", GameController.Category.LEGENDARY, 60));
+        this.events.add(new Event(EventType.GHAST_LEG, "¿Bloons?", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.PHANTOM_LEG, "¿TNT? ¿Del cielo?", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.SKELETON_LEG, "Muchos... esqueletos", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.TP_LEG, "Los orígenes", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.ADVENTURE_LEG, "¿Aventura... No...?", GameController.Category.LEGENDARY, 180));
+        this.events.add(new Event(EventType.TOTEM_LEG, "No son tan seguros los totem...", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.ARMOR_LEG, "La mejor defensa", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.LV_ZOMBIES_LEG, "+ lv zombies", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.LV_SKELETONS_LEG, "+ lv esqueletos", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.LV_SPIDERS_LEG, "+ lv arañas", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.BLOCKS_RANDOM_LEG, "¿Qué bloque?", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.BLOCKS_EXPLODE_LEG, "¿Seguro que no era TNT?", GameController.Category.LEGENDARY, 0));
+        this.events.add(new Event(EventType.JESUS_LEG, "Sabes... no me gusta el pan", GameController.Category.LEGENDARY, 0));
     }
 
     public void handleNewEvent(Event event) {
@@ -377,6 +398,21 @@ public class EventsController {
                 for (int i = 0; i < 10; ++i) {
                     Silverfish silverfish = (Silverfish) p.getWorld().spawnEntity(p.getLocation(), EntityType.SILVERFISH);
                     silverfish.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
+                }
+            });
+            case THUNDERS_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 5; ++i) {
+                    Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> p.getWorld().strikeLightning(p.getLocation()), 20L * i);
+                }
+            });
+            case GHAST_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 2; ++i) {
+                    Ghast ghast = (Ghast) p.getWorld().spawnEntity(p.getLocation(), EntityType.GHAST);
+                    ghast.getScoreboardTags().add("custom_ghast");
+                    ghast.customName(Component.text("Bloon Calabaza", TextColor.color(0xB86141)));
+                    Objects.requireNonNull(ghast.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(40);
+                    ghast.setHealth(40);
+                    ghast.setTarget(p);
                 }
             });
         }

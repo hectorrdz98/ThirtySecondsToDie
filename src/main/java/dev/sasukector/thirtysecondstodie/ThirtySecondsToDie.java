@@ -2,10 +2,7 @@ package dev.sasukector.thirtysecondstodie;
 
 import dev.sasukector.thirtysecondstodie.commands.GameCommand;
 import dev.sasukector.thirtysecondstodie.commands.OptionsCommand;
-import dev.sasukector.thirtysecondstodie.events.EpicEvents;
-import dev.sasukector.thirtysecondstodie.events.NormalEvents;
-import dev.sasukector.thirtysecondstodie.events.RareEvents;
-import dev.sasukector.thirtysecondstodie.events.SpawnEvents;
+import dev.sasukector.thirtysecondstodie.events.*;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +24,7 @@ public final class ThirtySecondsToDie extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new NormalEvents(), this);
         this.getServer().getPluginManager().registerEvents(new RareEvents(), this);
         this.getServer().getPluginManager().registerEvents(new EpicEvents(), this);
+        this.getServer().getPluginManager().registerEvents(new LegendaryEvents(), this);
 
         // Register commands
         Objects.requireNonNull(ThirtySecondsToDie.getInstance().getCommand("game")).setExecutor(new GameCommand());

@@ -47,7 +47,7 @@ public class EventsController {
         // Legendary events
         THUNDERS_LEG, INMORTAL_MOBS_LEG, GHAST_LEG, PHANTOM_LEG, SKELETON_LEG, TP_LEG, ADVENTURE_LEG,
         TOTEM_LEG, ARMOR_LEG, LV_ZOMBIES_LEG, LV_SKELETONS_LEG, LV_SPIDERS_LEG, BLOCKS_RANDOM_LEG,
-        BLOCKS_EXPLODE_LEG, JESUS_LEG;
+        BLOCKS_EXPLODE_LEG;
         public static Character getIcon(EventType eventType) {
             Character character = null;
             switch (eventType) {
@@ -131,14 +131,12 @@ public class EventsController {
         this.events.add(new Event(EventType.SKELETON_LEG, "Muchos... esqueletos", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.TP_LEG, "Los orígenes", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.ADVENTURE_LEG, "¿Aventura... No...?", GameController.Category.LEGENDARY, 180));
-        this.events.add(new Event(EventType.TOTEM_LEG, "No son tan seguros los totem...", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.ARMOR_LEG, "La mejor defensa", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.LV_ZOMBIES_LEG, "+ lv zombies", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.LV_SKELETONS_LEG, "+ lv esqueletos", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.LV_SPIDERS_LEG, "+ lv arañas", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.BLOCKS_RANDOM_LEG, "¿Qué bloque?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.BLOCKS_EXPLODE_LEG, "¿Seguro que no era TNT?", GameController.Category.LEGENDARY, 0));
-        this.events.add(new Event(EventType.JESUS_LEG, "Sabes... no me gusta el pan", GameController.Category.LEGENDARY, 0));
     }
 
     public void createAccEvents() {
@@ -538,17 +536,17 @@ public class EventsController {
             }
             case BLOCKS_RANDOM_LEG -> {
                 int currentValue = this.accEvents.get(EventType.BLOCKS_RANDOM_LEG);
-                this.accEvents.put(EventType.BLOCKS_RANDOM_LEG, currentValue + 5);
+                this.accEvents.put(EventType.BLOCKS_RANDOM_LEG, currentValue + 10);
                 ServerUtilities.sendBroadcastMessage(ServerUtilities
                         .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
-                        "Porcentaje actual " + (currentValue + 1) + "%");
+                        "Porcentaje actual " + (currentValue + 10) + "%");
             }
             case BLOCKS_EXPLODE_LEG -> {
                 int currentValue = this.accEvents.get(EventType.BLOCKS_EXPLODE_LEG);
-                this.accEvents.put(EventType.BLOCKS_EXPLODE_LEG, currentValue + 1);
+                this.accEvents.put(EventType.BLOCKS_EXPLODE_LEG, currentValue + 5);
                 ServerUtilities.sendBroadcastMessage(ServerUtilities
                         .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
-                        "Porcentaje actual " + (currentValue + 1) + "%");
+                        "Porcentaje actual " + (currentValue + 5) + "%");
             }
         }
     }

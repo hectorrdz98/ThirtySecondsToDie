@@ -6,6 +6,7 @@ import dev.sasukector.thirtysecondstodie.controllers.GameController;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Random;
+
 public class LegendaryEvents implements Listener {
+
+    private final Random random = new Random();
 
     @EventHandler
     public void onProjectileShoot(ProjectileLaunchEvent event) {
@@ -71,6 +76,29 @@ public class LegendaryEvents implements Listener {
         if (GameController.getInstance().getActiveEvents().stream()
                 .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
             event.setCancelled(true);
+        } else {
+            int lvlRandom = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_RANDOM_LEG);
+            if (random.nextDouble() < (lvlRandom / 100f)) {
+                event.setCancelled(true);
+                Block block = event.getBlock();
+                ItemStack itemInHand = event.getPlayer().getInventory().getItemInMainHand();
+                while (true) {
+                    int randomX = random.nextInt(10) - 5;
+                    int randomY = random.nextInt(10) - 5;
+                    int randomZ = random.nextInt(10) - 5;
+                    Block newBlock = block.getLocation().add(randomX, randomY, randomZ).getBlock();
+                    if (!newBlock.isEmpty()) {
+                        newBlock.breakNaturally(itemInHand);
+                        break;
+                    }
+                }
+            } else {
+                int lvlExplode = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_EXPLODE_LEG);
+                if (random.nextDouble() < (lvlExplode / 100f)) {
+                    Block block = event.getBlock();
+                    block.getWorld().createExplosion(block.getLocation(), 3);
+                }
+            }
         }
     }
 
@@ -79,6 +107,24 @@ public class LegendaryEvents implements Listener {
         if (GameController.getInstance().getActiveEvents().stream()
                 .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
             event.setCancelled(true);
+        } else {
+            int lvlRandom = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_RANDOM_LEG);
+            if (random.nextDouble() < (lvlRandom / 100f)) {
+                event.setCancelled(true);
+                Block block = event.getBlock();
+                while (true) {
+                    int randomX = random.nextInt(10) - 5;
+                    int randomY = random.nextInt(10) - 5;
+                    int randomZ = random.nextInt(10) - 5;
+                    Block newBlock = block.getLocation().add(randomX, randomY, randomZ).getBlock();
+                    if (newBlock.isEmpty()) {
+                        newBlock.setType(block.getType());
+                        event.getPlayer().getInventory().getItemInMainHand().subtract(1);
+                        event.getPlayer().updateInventory();
+                        break;
+                    }
+                }
+            }
         }
     }
 

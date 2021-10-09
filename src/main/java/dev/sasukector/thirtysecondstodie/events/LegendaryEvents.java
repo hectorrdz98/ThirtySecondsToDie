@@ -3,9 +3,10 @@ package dev.sasukector.thirtysecondstodie.events;
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.controllers.EventsController;
 import dev.sasukector.thirtysecondstodie.controllers.GameController;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -13,14 +14,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 public class LegendaryEvents implements Listener {
@@ -245,6 +250,88 @@ public class LegendaryEvents implements Listener {
                     if (lvlSpider >= 4)
                         spider.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
                 }, 10L);
+            }
+        } else if (event.getEntity() instanceof EnderDragon enderDragon) {
+            Objects.requireNonNull(enderDragon.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(500);
+            enderDragon.setHealth(500);
+            enderDragon.customName(Component.text("Bebé Dragostina", TextColor.color(0xA269A6)));
+            GameController.getInstance().setEnderDragon(enderDragon);
+        } else if (event.getEntity() instanceof Enderman enderman) {
+            ItemStack bootsEnderman = new ItemStack(Material.NETHERITE_BOOTS);
+            ItemMeta itemMetaBootsEnderman = bootsEnderman.getItemMeta();
+            itemMetaBootsEnderman.addEnchant(Enchantment.FROST_WALKER, 2, true);
+            bootsEnderman.setItemMeta(itemMetaBootsEnderman);
+            enderman.setCarriedBlock(Bukkit.createBlockData(Material.OBSIDIAN));
+            enderman.getEquipment().setBoots(bootsEnderman);
+            enderman.customName(Component.text("El Vigilante", TextColor.color(0xA269A6)));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*60,1,true,true));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20*20,1,true,true));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,20*60,1,true,true));
+            Optional<Entity> entity = enderman.getNearbyEntities(10, 10, 10).stream()
+                    .filter(e -> e instanceof Player).findAny();
+            if (entity.isPresent() && entity.get() instanceof LivingEntity livingEntity) {
+                enderman.setTarget(livingEntity);
+            }
+        }
+    }
+
+    @EventHandler
+    public void dragonPhase(EnderDragonChangePhaseEvent event) {
+        EnderDragon enderDragon = event.getEntity();
+        if(enderDragon.getWorld().getPlayers().size() == 0) {
+            return;
+        }
+        if(event.getCurrentPhase() == null) {
+            return;
+        }
+        if(enderDragon.getCustomName() == null) {
+            return;
+        }
+        if(event.getCurrentPhase().equals(EnderDragon.Phase.LAND_ON_PORTAL)) {
+            for(int i = 0; i < 10; ++i) {
+                enderDragon.getWorld().spawnEntity(enderDragon.getWorld()
+                        .getHighestBlockAt(enderDragon.getLocation().add(random.nextInt(5), 0, random.nextInt(5)))
+                        .getLocation(), EntityType.ENDERMAN);
+            }
+
+            ItemStack headBrute = new ItemStack(Material.NETHERITE_HELMET);
+            ItemStack bodyBrute = new ItemStack(Material.NETHERITE_CHESTPLATE);
+            ItemStack legsBrute = new ItemStack(Material.NETHERITE_LEGGINGS);
+            ItemStack bootsBrute = new ItemStack(Material.NETHERITE_BOOTS);
+            ItemStack handBrute = new ItemStack(Material.NETHERITE_AXE);
+
+            for(int i = 0; i < 7; ++i) {
+                Zombie zombie = (Zombie) enderDragon.getWorld().spawnEntity(enderDragon.getWorld()
+                        .getHighestBlockAt(enderDragon.getLocation().add(random.nextInt(5), 0, random.nextInt(5)))
+                        .getLocation(), EntityType.ZOMBIE);
+                zombie.customName(Component.text("Zombie Facha", TextColor.color(0x3591A6)));
+                zombie.getEquipment().setItemInMainHand(handBrute);
+                zombie.getEquipment().setHelmet(headBrute);
+                zombie.getEquipment().setChestplate(bodyBrute);
+                zombie.getEquipment().setLeggings(legsBrute);
+                zombie.getEquipment().setBoots(bootsBrute);
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,20*60,1));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,99999,3));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,99999,3));
+                Optional<Entity> entity = zombie.getNearbyEntities(10, 10, 10).stream()
+                        .filter(e -> e instanceof Player).findAny();
+                if (entity.isPresent() && entity.get() instanceof LivingEntity livingEntity) {
+                    zombie.setTarget(livingEntity);
+                }
+            }
+
+            for (int i = 0; i < 5; ++i) {
+                Ghast ghast = (Ghast) enderDragon.getWorld().spawnEntity(enderDragon.getLocation()
+                        .add(random.nextInt(10), 0, random.nextInt(10)), EntityType.GHAST);
+                ghast.getScoreboardTags().add("custom_ghast");
+                ghast.customName(Component.text("Bloon Calabaza", TextColor.color(0xB86141)));
+                Objects.requireNonNull(ghast.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(40);
+                ghast.setHealth(40);
+                Optional<Entity> entity = ghast.getNearbyEntities(30, 30, 30).stream()
+                        .filter(e -> e instanceof Player).findAny();
+                if (entity.isPresent() && entity.get() instanceof LivingEntity livingEntity) {
+                    ghast.setTarget(livingEntity);
+                }
             }
         }
     }

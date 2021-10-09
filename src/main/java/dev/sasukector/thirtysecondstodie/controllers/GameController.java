@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
+import org.bukkit.entity.EnderDragon;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class GameController {
     private int timerTaskID = -1;
     private @Getter final List<Event> activeEvents;
     private @Getter @Setter Event setEvent = null;
+    private @Getter @Setter EnderDragon enderDragon = null;
 
     public enum Status {
         PAUSED, PLAYING

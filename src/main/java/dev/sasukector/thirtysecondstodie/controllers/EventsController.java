@@ -16,6 +16,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -47,7 +48,9 @@ public class EventsController {
         // Legendary events
         THUNDERS_LEG, INMORTAL_MOBS_LEG, GHAST_LEG, PHANTOM_LEG, SKELETON_LEG, TP_LEG, ADVENTURE_LEG,
         TOTEM_LEG, ARMOR_LEG, LV_ZOMBIES_LEG, LV_SKELETONS_LEG, LV_SPIDERS_LEG, BLOCKS_RANDOM_LEG,
-        BLOCKS_EXPLODE_LEG;
+        BLOCKS_EXPLODE_LEG,
+        // God events
+        SPAWN_DIVINE, HEAL_DRAGON_DIVINE, WITHERS_DIVINE, KNIGHT_DIVINE, CONTERSTINE_DIVINE;
         public static Character getIcon(EventType eventType) {
             Character character = null;
             switch (eventType) {
@@ -137,6 +140,13 @@ public class EventsController {
         this.events.add(new Event(EventType.LV_SPIDERS_LEG, "+ lv arañas", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.BLOCKS_RANDOM_LEG, "¿Qué bloque?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.BLOCKS_EXPLODE_LEG, "¿Seguro que no era TNT?", GameController.Category.LEGENDARY, 0));
+
+        // GOD
+        this.events.add(new Event(EventType.SPAWN_DIVINE, "¿Y mi spawn?", GameController.Category.GOD, 0));
+        this.events.add(new Event(EventType.HEAL_DRAGON_DIVINE, "Mucha vida al dragón", GameController.Category.GOD, 0));
+        this.events.add(new Event(EventType.WITHERS_DIVINE, "¿Withers?", GameController.Category.GOD, 0));
+        this.events.add(new Event(EventType.KNIGHT_DIVINE, "El héroe del Nether", GameController.Category.GOD, 0));
+        this.events.add(new Event(EventType.CONTERSTINE_DIVINE, "Conterstine...", GameController.Category.GOD, 0));
     }
 
     public void createAccEvents() {
@@ -548,6 +558,85 @@ public class EventsController {
                         .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
                         "Porcentaje actual " + (currentValue + 5) + "%");
             }
+            case SPAWN_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> p.setBedSpawnLocation(new Location(ServerUtilities.getOverworld(), 0, 70, 0), true));
+            case HEAL_DRAGON_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                EnderDragon enderDragon = GameController.getInstance().getEnderDragon();
+                if (enderDragon != null) {
+                    enderDragon.setHealth(500);
+                }
+            });
+            case WITHERS_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 5; ++i) {
+                    Wither wither = (Wither) p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER);
+                    wither.customName(Component.text("Terror Encarnado", TextColor.color(0x4A4B4A)));
+                    wither.setTarget(p);
+                }
+            });
+            case KNIGHT_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                WitherSkeleton witherSkeleton = (WitherSkeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER_SKELETON);
+                witherSkeleton.customName(Component.text("Oscuridad Total", TextColor.color(0x4A4B4A)));
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(100);
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.5f);
+                witherSkeleton.setHealth(100);
+
+                EntityEquipment entityEquipment = witherSkeleton.getEquipment();
+
+                ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setHelmet(helmet);
+
+                ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setChestplate(chestplate);
+
+                ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setLeggings(leggings);
+
+                ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setBoots(boots);
+
+                ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+                sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 7);
+                entityEquipment.setItemInMainHand(sword);
+            });
+            case CONTERSTINE_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Zombie zombie = (Zombie) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
+                zombie.customName(Component.text("Conterstine", TextColor.color(0x37FF56)));
+                Objects.requireNonNull(zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
+
+                EntityEquipment entityEquipment = zombie.getEquipment();
+
+                ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                helmet.addUnsafeEnchantment(Enchantment.OXYGEN, 3);
+                entityEquipment.setHelmet(helmet);
+
+                ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setChestplate(chestplate);
+
+                ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                entityEquipment.setLeggings(leggings);
+
+                ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+                boots.addUnsafeEnchantment(Enchantment.SOUL_SPEED, 3);
+                boots.addUnsafeEnchantment(Enchantment.DEPTH_STRIDER, 5);
+                entityEquipment.setBoots(boots);
+
+                ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
+                sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 5);
+                sword.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 1);
+                sword.addUnsafeEnchantment(Enchantment.SWEEPING_EDGE, 3);
+                entityEquipment.setItemInMainHand(sword);
+
+                ItemStack shield = new ItemStack(Material.SHIELD);
+                shield.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
+                entityEquipment.setItemInOffHand(shield);
+            });
         }
     }
 

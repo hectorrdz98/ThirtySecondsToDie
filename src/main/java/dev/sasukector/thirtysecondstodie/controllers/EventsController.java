@@ -1,6 +1,7 @@
 package dev.sasukector.thirtysecondstodie.controllers;
 
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
+import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import dev.sasukector.thirtysecondstodie.models.Event;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -448,6 +449,10 @@ public class EventsController {
                     skeleton.getEquipment().setBoots(null);
                     skeleton.setCanPickupItems(false);
                 }
+            });
+            case TP_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 0));
+                p.teleport(new Location(ServerUtilities.getOverworld(), 0, 70, 0));
             });
         }
     }

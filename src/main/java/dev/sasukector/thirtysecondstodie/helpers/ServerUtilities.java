@@ -6,11 +6,24 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerUtilities {
 
     private final static @Getter MiniMessage miniMessage = MiniMessage.get();
+
+    // Associate all world names
+    private final static Map<String, String> worldsNames;
+    static {
+        worldsNames = new HashMap<>();
+        worldsNames.put("overworld", "world");
+        worldsNames.put("nether", "world_nether");
+        worldsNames.put("end", "world_the_end");
+    }
 
     public static Component getPluginNameColored() {
         return miniMessage.parse("<bold><gradient:#DC3636:#8B1919>30 ☠ segundos</gradient></bold>");
@@ -73,4 +86,10 @@ public class ServerUtilities {
                 .append(message));
     }
 
+    public static World getOverworld() {
+        if (worldsNames.containsKey("overworld")) {
+            return Bukkit.getWorld(worldsNames.get("overworld"));
+        }
+        return null;
+    }
 }

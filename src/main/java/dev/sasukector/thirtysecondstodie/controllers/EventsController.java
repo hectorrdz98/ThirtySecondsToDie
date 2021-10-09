@@ -239,7 +239,10 @@ public class EventsController {
                 creeper.setPowered(true);
                 Objects.requireNonNull(creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
             });
-            case VINDICATOR_RARE -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().spawnEntity(p.getLocation(), EntityType.VINDICATOR));
+            case VINDICATOR_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Vindicator vindicator = (Vindicator) p.getWorld().spawnEntity(p.getLocation(), EntityType.VINDICATOR);
+                vindicator.customName(Component.text("Casi Humano", TextColor.color(0xA4A84A)));
+            });
             case TRAP_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 List<int[]> glassLoc = Arrays.asList(
                         new int[]{1, 0, 0}, new int[]{-1, 0, 0}, new int[]{0, 0, 1}, new int[]{0, 0, -1},
@@ -309,6 +312,28 @@ public class EventsController {
                 p.getWorld().spawnEntity(p.getLocation().add(0, 11, 0), EntityType.VILLAGER);
                 p.getWorld().spawnEntity(p.getLocation().add(0, 11, 0), EntityType.VILLAGER);
                 p.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 99999, 4));
+            });
+            case WITHER_SKELETONS_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 3; ++i) {
+                    WitherSkeleton witherSkeleton = (WitherSkeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER_SKELETON);
+                    witherSkeleton.customName(Component.text("Oscuridad Total", TextColor.color(0x676867)));
+                    Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
+                    Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(30);
+                    witherSkeleton.setHealth(30);
+                }
+            });
+            case VEX_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 2; ++i) {
+                    Vex vex = (Vex) p.getWorld().spawnEntity(p.getLocation(), EntityType.VEX);
+                    vex.customName(Component.text("Negocio Serio", TextColor.color(0x4A4B4A)));
+                }
+            });
+            case ENDERMAN_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 2; ++i) {
+                    Enderman enderman = (Enderman) p.getWorld().spawnEntity(p.getLocation(), EntityType.ENDERMAN);
+                    enderman.customName(Component.text("Terror Andante", TextColor.color(0xB85F42)));
+                    enderman.setTarget(p);
+                }
             });
         }
     }

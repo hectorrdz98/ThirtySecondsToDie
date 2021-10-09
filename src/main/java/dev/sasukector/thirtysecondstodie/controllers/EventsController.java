@@ -349,6 +349,13 @@ public class EventsController {
                 p.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 60, 99));
             });
+            case DROWNED_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 5; ++i) {
+                    Drowned drowned = (Drowned) p.getWorld().spawnEntity(p.getLocation(), EntityType.DROWNED);
+                    drowned.getEquipment().setItemInMainHand(new ItemStack(Material.TRIDENT));
+                    drowned.setTarget(p);
+                }
+            });
         }
     }
 

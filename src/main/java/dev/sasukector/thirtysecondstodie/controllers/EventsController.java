@@ -345,6 +345,10 @@ public class EventsController {
                     }
                 }
             });
+            case WATER_DROP_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                p.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 60, 99));
+            });
         }
     }
 

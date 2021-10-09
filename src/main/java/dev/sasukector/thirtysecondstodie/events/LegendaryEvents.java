@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 public class LegendaryEvents implements Listener {
@@ -54,98 +55,110 @@ public class LegendaryEvents implements Listener {
         }
     }
 
+    public void setEquipment(EntityEquipment entityEquipment, EntityType entityType, int lvl) {
+        switch (lvl) {
+            case 1 -> {
+                entityEquipment.setHelmet(new ItemStack(Material.IRON_HELMET));
+                entityEquipment.setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+                entityEquipment.setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+                entityEquipment.setBoots(new ItemStack(Material.IRON_BOOTS));
+
+                if (entityType == EntityType.ZOMBIE) {
+                    ItemStack sword = new ItemStack(Material.IRON_SWORD);
+                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    entityEquipment.setItemInMainHand(sword);
+                } else if (entityType == EntityType.SKELETON) {
+                    ItemStack bow = new ItemStack(Material.BOW);
+                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    entityEquipment.setItemInMainHand(bow);
+                }
+            }
+            case 2 -> {
+                ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                entityEquipment.setHelmet(helmet);
+
+                ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                entityEquipment.setChestplate(chestplate);
+
+                ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                entityEquipment.setLeggings(leggings);
+
+                ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                entityEquipment.setBoots(boots);
+
+                if (entityType == EntityType.ZOMBIE) {
+                    ItemStack sword = new ItemStack(Material.IRON_SWORD);
+                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
+                    entityEquipment.setItemInMainHand(sword);
+                } else if (entityType == EntityType.SKELETON) {
+                    ItemStack bow = new ItemStack(Material.BOW);
+                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    entityEquipment.setItemInMainHand(bow);
+                }
+            }
+            case 3 -> {
+                entityEquipment.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+                entityEquipment.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+                entityEquipment.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+                entityEquipment.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+
+                if (entityType == EntityType.ZOMBIE) {
+                    ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    entityEquipment.setItemInMainHand(sword);
+                } else if (entityType == EntityType.SKELETON) {
+                    ItemStack bow = new ItemStack(Material.BOW);
+                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                    entityEquipment.setItemInMainHand(bow);
+                }
+            }
+            default -> {
+                ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                entityEquipment.setHelmet(helmet);
+
+                ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                entityEquipment.setChestplate(chestplate);
+
+                ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                entityEquipment.setLeggings(leggings);
+
+                ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                entityEquipment.setBoots(boots);
+
+                if (entityType == EntityType.ZOMBIE) {
+                    ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, lvl - 1);
+                    entityEquipment.setItemInMainHand(sword);
+                } else if (entityType == EntityType.SKELETON) {
+                    ItemStack bow = new ItemStack(Material.BOW);
+                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, lvl - 1);
+                    entityEquipment.setItemInMainHand(bow);
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (event.getEntity() instanceof Zombie zombie) {
             int lvlZombies = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_ZOMBIES_LEG);
             if (lvlZombies > 0) {
-                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> {
-                    switch (lvlZombies) {
-                        case 1 -> {
-                            zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
-                            zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-                            zombie.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-                            zombie.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
-
-                            ItemStack sword = new ItemStack(Material.IRON_SWORD);
-                            sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-                            zombie.getEquipment().setItemInMainHand(sword);
-                        }
-                        case 2 -> {
-                            ItemStack helmet = new ItemStack(Material.IRON_HELMET);
-                            helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setHelmet(helmet);
-
-                            ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
-                            chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setChestplate(chestplate);
-
-                            ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
-                            leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setLeggings(leggings);
-
-                            ItemStack boots = new ItemStack(Material.IRON_BOOTS);
-                            boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setBoots(boots);
-
-                            ItemStack sword = new ItemStack(Material.IRON_SWORD);
-                            sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
-                            zombie.getEquipment().setItemInMainHand(sword);
-                        }
-                        case 3 -> {
-                            zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-                            zombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-                            zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-                            zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-
-                            ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-                            sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-                            zombie.getEquipment().setItemInMainHand(sword);
-                        }
-                        case 4 -> {
-                            ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
-                            helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setHelmet(helmet);
-
-                            ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
-                            chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setChestplate(chestplate);
-
-                            ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
-                            leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setLeggings(leggings);
-
-                            ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
-                            boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                            zombie.getEquipment().setBoots(boots);
-
-                            ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-                            sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
-                            zombie.getEquipment().setItemInMainHand(sword);
-                        }
-                        default -> {
-                            ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
-                            helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvlZombies - 1);
-                            zombie.getEquipment().setHelmet(helmet);
-
-                            ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
-                            chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvlZombies - 1);
-                            zombie.getEquipment().setChestplate(chestplate);
-
-                            ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
-                            leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvlZombies - 1);
-                            zombie.getEquipment().setLeggings(leggings);
-
-                            ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
-                            boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvlZombies - 1);
-                            zombie.getEquipment().setBoots(boots);
-
-                            ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-                            sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, lvlZombies - 1);
-                            zombie.getEquipment().setItemInMainHand(sword);
-                        }
-                    }
-                }, 10L);
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
+                        setEquipment(zombie.getEquipment(), EntityType.ZOMBIE, lvlZombies), 10L);
+            }
+        } else if (event.getEntity() instanceof Skeleton skeleton) {
+            int lvlSkeleton = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SKELETONS_LEG);
+            if (lvlSkeleton > 0) {
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
+                        setEquipment(skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
             }
         }
     }

@@ -77,6 +77,7 @@ public class GameController {
         this.currentStatus = Status.PLAYING;
         this.remainingSeconds = 30;
         this.activeEvents.clear();
+        EventsController.getInstance().createAccEvents();
         ServerUtilities.sendBroadcastMessage(ServerUtilities.getMiniMessage().parse("<bold><gradient:#9FE69E:#6FA16E>Ha iniciado el juego</gradient></bold>"));
         Bukkit.getOnlinePlayers().forEach(p -> {
             p.playSound(p.getLocation(), "minecraft:block.note_block.bell", 1, 1);

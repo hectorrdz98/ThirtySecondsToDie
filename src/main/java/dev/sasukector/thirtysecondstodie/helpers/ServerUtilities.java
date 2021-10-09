@@ -92,4 +92,9 @@ public class ServerUtilities {
         }
         return null;
     }
+
+    public static char getCharFromString(String base) {
+        int hex = Integer.parseInt(base, 16);
+        return (char) hex;
+    }
 }

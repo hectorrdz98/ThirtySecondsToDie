@@ -66,6 +66,38 @@ public class BoardController {
                         lines.add("+" + (GameController.getInstance().getActiveEvents().size() - 3) + " eventos extra");
                     }
                 }
+                if (EventsController.getInstance().getAccEvents().size() > 0) {
+                    StringBuilder modifications = new StringBuilder();
+                    int currentCount = 0;
+                    boolean setTitle = false;
+                    for (Map.Entry entry : EventsController.getInstance().getAccEvents().entrySet()) {
+                        EventsController.EventType eventType = (EventsController.EventType) entry.getKey();
+                        int value = (int) entry.getValue();
+                        if (value > 0) {
+                            if (currentCount >= 4) {
+                                if (!setTitle) {
+                                    lines.add("");
+                                    lines.add("Modificadores:");
+                                }
+                                lines.add(modifications.toString());
+                                modifications = new StringBuilder();
+                                currentCount = 0;
+                                setTitle = true;
+                            }
+                            modifications.append((modifications.length() == 0) ? "§f" : " §f");
+                            modifications.append(EventsController.EventType.getIcon(eventType))
+                                    .append(" §7(").append(value).append(")");
+                            currentCount++;
+                        }
+                    }
+                    if (modifications.length() > 0) {
+                        if (!setTitle) {
+                            lines.add("");
+                            lines.add("Modificadores:");
+                        }
+                        lines.add(modifications.toString());
+                    }
+                }
                 board.updateLines(lines);
             } else {
                 board.updateLines(

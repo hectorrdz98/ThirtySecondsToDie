@@ -4,6 +4,7 @@ import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import dev.sasukector.thirtysecondstodie.models.Event;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -29,6 +30,7 @@ public class EventsController {
 
     public static EventsController instance = null;
     private @Getter final List<Event> events;
+    private @Getter @Setter Map<EventType, Integer> accEvents;
     private final Random random;
 
     public enum EventType {
@@ -45,7 +47,19 @@ public class EventsController {
         // Legendary events
         THUNDERS_LEG, INMORTAL_MOBS_LEG, GHAST_LEG, PHANTOM_LEG, SKELETON_LEG, TP_LEG, ADVENTURE_LEG,
         TOTEM_LEG, ARMOR_LEG, LV_ZOMBIES_LEG, LV_SKELETONS_LEG, LV_SPIDERS_LEG, BLOCKS_RANDOM_LEG,
-        BLOCKS_EXPLODE_LEG, JESUS_LEG
+        BLOCKS_EXPLODE_LEG, JESUS_LEG;
+        public static Character getIcon(EventType eventType) {
+            Character character = null;
+            switch (eventType) {
+                case TOTEM_LEG -> character = ServerUtilities.getCharFromString("E006");
+                case LV_ZOMBIES_LEG -> character = ServerUtilities.getCharFromString("E002");
+                case LV_SKELETONS_LEG -> character = ServerUtilities.getCharFromString("E001");
+                case LV_SPIDERS_LEG -> character = ServerUtilities.getCharFromString("E004");
+                case BLOCKS_RANDOM_LEG -> character = ServerUtilities.getCharFromString("E003");
+                case BLOCKS_EXPLODE_LEG -> character = ServerUtilities.getCharFromString("E005");
+            }
+            return character;
+        }
     }
 
     public static EventsController getInstance() {
@@ -57,8 +71,10 @@ public class EventsController {
 
     public EventsController() {
         this.events = new ArrayList<>();
+        this.accEvents = new HashMap<>();
         this.random = new Random();
         createEvents();
+        createAccEvents();
     }
 
     private void createEvents() {
@@ -109,7 +125,7 @@ public class EventsController {
 
         // LEGENDARY
         this.events.add(new Event(EventType.THUNDERS_LEG, "¿El rasho?", GameController.Category.LEGENDARY, 0));
-        this.events.add(new Event(EventType.INMORTAL_MOBS_LEG, "Uy... parece que no mueren", GameController.Category.LEGENDARY, 60));
+        this.events.add(new Event(EventType.INMORTAL_MOBS_LEG, "Uy... parece que no mueren", GameController.Category.LEGENDARY, 120));
         this.events.add(new Event(EventType.GHAST_LEG, "¿Bloons?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.PHANTOM_LEG, "¿TNT? ¿Del cielo?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.SKELETON_LEG, "Muchos... esqueletos", GameController.Category.LEGENDARY, 0));
@@ -123,6 +139,15 @@ public class EventsController {
         this.events.add(new Event(EventType.BLOCKS_RANDOM_LEG, "¿Qué bloque?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.BLOCKS_EXPLODE_LEG, "¿Seguro que no era TNT?", GameController.Category.LEGENDARY, 0));
         this.events.add(new Event(EventType.JESUS_LEG, "Sabes... no me gusta el pan", GameController.Category.LEGENDARY, 0));
+    }
+
+    public void createAccEvents() {
+        this.accEvents.put(EventType.TOTEM_LEG, 0);
+        this.accEvents.put(EventType.LV_ZOMBIES_LEG, 0);
+        this.accEvents.put(EventType.LV_SKELETONS_LEG, 0);
+        this.accEvents.put(EventType.LV_SPIDERS_LEG, 0);
+        this.accEvents.put(EventType.BLOCKS_RANDOM_LEG, 0);
+        this.accEvents.put(EventType.BLOCKS_EXPLODE_LEG, 0);
     }
 
     public void handleNewEvent(Event event) {
@@ -156,29 +181,34 @@ public class EventsController {
                     miniZombie.customName(Component.text("Zombie Facha", TextColor.color(0xDF7CFF)));
                     miniZombie.setBaby();
                     Objects.requireNonNull(miniZombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.3f);
+                    miniZombie.setTarget(p);
                 }
             });
             case ZOMBIE_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < random.nextInt(3) + 1; ++i) {
-                    Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
-                    entity.customName(Component.text("XR-Zombie", TextColor.color(0x6BD3FF)));
+                    Zombie zombie = (Zombie) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
+                    zombie.customName(Component.text("XR-Zombie", TextColor.color(0x6BD3FF)));
+                    zombie.setTarget(p);
                 }
             });
             case SKELETON_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < random.nextInt(3) + 1; ++i) {
-                    Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
-                    entity.customName(Component.text("Esqueleto Vegano", TextColor.color(0x37FF56)));
+                    Skeleton skeleton = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                    skeleton.customName(Component.text("Esqueleto Vegano", TextColor.color(0x37FF56)));
+                    skeleton.setTarget(p);
                 }
             });
             case CREEPER_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
-                Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.CREEPER);
-                entity.customName(Component.text("Creeper Suicida", TextColor.color(0xFF605B)));
+                Creeper creeper = (Creeper) p.getWorld().spawnEntity(p.getLocation(), EntityType.CREEPER);
+                creeper.customName(Component.text("Creeper Suicida", TextColor.color(0xFF605B)));
+                creeper.setTarget(p);
             });
             case SLIMES_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < 2; ++i) {
-                    Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.SLIME);
-                    entity.getScoreboardTags().add("custom_slime");
-                    entity.customName(Component.text("Espiritu Gelatinoso", TextColor.color(0xA0F0FF)));
+                    Slime slime = (Slime) p.getWorld().spawnEntity(p.getLocation(), EntityType.SLIME);
+                    slime.getScoreboardTags().add("custom_slime");
+                    slime.customName(Component.text("Espiritu Gelatinoso", TextColor.color(0xA0F0FF)));
+                    slime.setTarget(p);
                 }
             });
             case ANVIL_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().getBlockAt(p.getLocation().add(0, 6, 0)).setType(Material.ANVIL));
@@ -245,9 +275,13 @@ public class EventsController {
                     Rabbit rabbit = (Rabbit) p.getWorld().spawnEntity(p.getLocation(), EntityType.RABBIT);
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                     rabbit.customName(Component.text("Conejito chocolatoso", TextColor.color(0x9E513B)));
+                    rabbit.setTarget(p);
                 }
             });
-            case ILLUSIONER_RARE -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().spawnEntity(p.getLocation(), EntityType.ILLUSIONER));
+            case ILLUSIONER_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Illusioner illusioner = (Illusioner) p.getWorld().spawnEntity(p.getLocation(), EntityType.ILLUSIONER);
+                illusioner.setTarget(p);
+            });
             case SHUFFLE_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 ItemStack[] items = p.getInventory().getContents();
                 List<Integer> indexes = Stream.iterate(0, n -> n + 1).limit(items.length).collect(Collectors.toList());
@@ -263,10 +297,12 @@ public class EventsController {
                 creeper.customName(Component.text("Creeper Atomico", TextColor.color(0x2A854A)));
                 creeper.setPowered(true);
                 Objects.requireNonNull(creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
+                creeper.setTarget(p);
             });
             case VINDICATOR_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 Vindicator vindicator = (Vindicator) p.getWorld().spawnEntity(p.getLocation(), EntityType.VINDICATOR);
                 vindicator.customName(Component.text("Casi Humano", TextColor.color(0xA4A84A)));
+                vindicator.setTarget(p);
             });
             case TRAP_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 List<int[]> glassLoc = Arrays.asList(
@@ -345,12 +381,14 @@ public class EventsController {
                     Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
                     Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(30);
                     witherSkeleton.setHealth(30);
+                    witherSkeleton.setTarget(p);
                 }
             });
             case VEX_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < 2; ++i) {
                     Vex vex = (Vex) p.getWorld().spawnEntity(p.getLocation(), EntityType.VEX);
                     vex.customName(Component.text("Negocio Serio", TextColor.color(0x4A4B4A)));
+                    vex.setTarget(p);
                 }
             });
             case ENDERMAN_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
@@ -393,6 +431,7 @@ public class EventsController {
                     skeleton.getEquipment().setItemInMainHand(bow);
                     Objects.requireNonNull(skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(40);
                     skeleton.setHealth(40);
+                    skeleton.setTarget(p);
                 }
             });
             case SHADOUNE_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> p.setHealth(0.5));
@@ -400,6 +439,7 @@ public class EventsController {
                 for (int i = 0; i < 10; ++i) {
                     Silverfish silverfish = (Silverfish) p.getWorld().spawnEntity(p.getLocation(), EntityType.SILVERFISH);
                     silverfish.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
+                    silverfish.setTarget(p);
                 }
             });
             case THUNDERS_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
@@ -454,6 +494,62 @@ public class EventsController {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 0));
                 p.teleport(new Location(ServerUtilities.getOverworld(), 0, 70, 0));
             });
+            case TOTEM_LEG -> {
+                int currentValue = this.accEvents.get(EventType.TOTEM_LEG);
+                this.accEvents.put(EventType.TOTEM_LEG, currentValue + 1);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Porcentaje actual " + (currentValue + 1) + "%");
+            }
+            case ARMOR_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+                helmet.addEnchantment(Enchantment.BINDING_CURSE, 1);
+                p.getInventory().setHelmet(helmet);
+                ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+                chestplate.addEnchantment(Enchantment.BINDING_CURSE, 1);
+                p.getInventory().setChestplate(chestplate);
+                ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+                leggings.addEnchantment(Enchantment.BINDING_CURSE, 1);
+                p.getInventory().setLeggings(leggings);
+                ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+                boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
+                p.getInventory().setBoots(boots);
+            });
+            case LV_ZOMBIES_LEG -> {
+                int currentValue = this.accEvents.get(EventType.LV_ZOMBIES_LEG);
+                this.accEvents.put(EventType.LV_ZOMBIES_LEG, currentValue + 1);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Nivel actual " + (currentValue + 1));
+            }
+            case LV_SKELETONS_LEG -> {
+                int currentValue = this.accEvents.get(EventType.LV_SKELETONS_LEG);
+                this.accEvents.put(EventType.LV_SKELETONS_LEG, currentValue + 1);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Nivel actual " + (currentValue + 1));
+            }
+            case LV_SPIDERS_LEG -> {
+                int currentValue = this.accEvents.get(EventType.LV_SPIDERS_LEG);
+                this.accEvents.put(EventType.LV_SPIDERS_LEG, currentValue + 1);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Nivel actual " + (currentValue + 1));
+            }
+            case BLOCKS_RANDOM_LEG -> {
+                int currentValue = this.accEvents.get(EventType.BLOCKS_RANDOM_LEG);
+                this.accEvents.put(EventType.BLOCKS_RANDOM_LEG, currentValue + 5);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Porcentaje actual " + (currentValue + 1) + "%");
+            }
+            case BLOCKS_EXPLODE_LEG -> {
+                int currentValue = this.accEvents.get(EventType.BLOCKS_EXPLODE_LEG);
+                this.accEvents.put(EventType.BLOCKS_EXPLODE_LEG, currentValue + 1);
+                ServerUtilities.sendBroadcastMessage(ServerUtilities
+                        .getCategoryColor(GameController.getInstance().getCurrentCategory()) +
+                        "Porcentaje actual " + (currentValue + 1) + "%");
+            }
         }
     }
 

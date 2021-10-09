@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -414,6 +415,25 @@ public class EventsController {
                     ghast.setHealth(40);
                     ghast.setTarget(p);
                 }
+            });
+            case PHANTOM_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Phantom phantom = (Phantom) p.getWorld().spawnEntity(p.getLocation().add(0, 20, 0), EntityType.PHANTOM);
+                phantom.getScoreboardTags().add("custom_phantom");
+                phantom.customName(Component.text("Espiritu Rojo", TextColor.color(0xA61A2A)));
+                phantom.setSize(30);
+                Objects.requireNonNull(phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(100);
+                phantom.setHealth(100);
+                phantom.setTarget(p);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (phantom.isDead()) {
+                            cancel();
+                        } else {
+                            phantom.getWorld().spawnEntity(phantom.getLocation().add(0, -1, 0), EntityType.PRIMED_TNT);
+                        }
+                    }
+                }.runTaskTimer(ThirtySecondsToDie.getInstance(), 0L, 20L);
             });
         }
     }

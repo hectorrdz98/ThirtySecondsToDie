@@ -12,8 +12,10 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -95,7 +97,7 @@ public class EventsController {
         this.events.add(new Event(EventType.FLOOR_LAVA_EPIC, "¿Lava? ¿¡LAVA!?", GameController.Category.EPIC, 60));
         this.events.add(new Event(EventType.DROWNED_EPIC, "Finalmente, tridentes...", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.SNIPER_EPIC, "No me dispares... por favor", GameController.Category.EPIC, 0));
-        this.events.add(new Event(EventType.SHADOUNE_EPIC, "¿1/2 de vida?", GameController.Category.EPIC, 0));
+        this.events.add(new Event(EventType.SHADOUNE_EPIC, "¿1/2 de vida? ¿Shadoune?", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.ONLY_BOW_EPIC, "Solo sé usar el arco", GameController.Category.EPIC, 120));
         this.events.add(new Event(EventType.SILVER_FISH_EPIC, "Pequeños pero molestos", GameController.Category.EPIC, 0));
     }
@@ -354,6 +356,27 @@ public class EventsController {
                     Drowned drowned = (Drowned) p.getWorld().spawnEntity(p.getLocation(), EntityType.DROWNED);
                     drowned.getEquipment().setItemInMainHand(new ItemStack(Material.TRIDENT));
                     drowned.setTarget(p);
+                }
+            });
+            case SNIPER_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 4; ++i) {
+                    Skeleton skeleton = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                    skeleton.customName(Component.text("Francotirador", TextColor.color(0x4066B8)));
+                    ItemStack bow = new ItemStack(Material.BOW);
+                    ItemMeta itemMeta = bow.getItemMeta();
+                    itemMeta.addEnchant(Enchantment.ARROW_KNOCKBACK, 20, true);
+                    itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+                    bow.setItemMeta(itemMeta);
+                    skeleton.getEquipment().setItemInMainHand(bow);
+                    Objects.requireNonNull(skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(40);
+                    skeleton.setHealth(40);
+                }
+            });
+            case SHADOUNE_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> p.setHealth(0.5));
+            case SILVER_FISH_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                for (int i = 0; i < 10; ++i) {
+                    Silverfish silverfish = (Silverfish) p.getWorld().spawnEntity(p.getLocation(), EntityType.SILVERFISH);
+                    silverfish.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
                 }
             });
         }

@@ -94,7 +94,7 @@ public class EventsController {
         this.events.add(new Event(EventType.ANVIL_EPIC, "Mucho hierro", GameController.Category.EPIC, 30));
         this.events.add(new Event(EventType.WATER_DROP_EPIC, "¡WaterDrop!", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.NO_MOVE_EPIC, "Shh... No te muevas", GameController.Category.EPIC, 10));
-        this.events.add(new Event(EventType.FLOOR_LAVA_EPIC, "¿Lava? ¿¡LAVA!?", GameController.Category.EPIC, 60));
+        this.events.add(new Event(EventType.FLOOR_LAVA_EPIC, "¿Lava? ¿¡LAVA!?", GameController.Category.EPIC, 120));
         this.events.add(new Event(EventType.DROWNED_EPIC, "Finalmente, tridentes...", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.SNIPER_EPIC, "No me dispares... por favor", GameController.Category.EPIC, 0));
         this.events.add(new Event(EventType.SHADOUNE_EPIC, "¿1/2 de vida? ¿Shadoune?", GameController.Category.EPIC, 0));

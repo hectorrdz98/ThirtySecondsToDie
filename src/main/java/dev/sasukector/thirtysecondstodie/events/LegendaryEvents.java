@@ -14,6 +14,8 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class LegendaryEvents implements Listener {
 
@@ -159,6 +161,19 @@ public class LegendaryEvents implements Listener {
             if (lvlSkeleton > 0) {
                 Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
                         setEquipment(skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
+            }
+        } else if (event.getEntity() instanceof Spider spider) {
+            int lvlSpider = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SPIDERS_LEG);
+            if (lvlSpider > 0) {
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> {
+                    spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, lvlSpider - 1));
+                    if (lvlSpider >= 2)
+                        spider.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 0));
+                    if (lvlSpider >= 3)
+                        spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 99999, lvlSpider - 1));
+                    if (lvlSpider >= 4)
+                        spider.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
+                }, 10L);
             }
         }
     }

@@ -335,6 +335,16 @@ public class EventsController {
                     enderman.setTarget(p);
                 }
             });
+            case VOID_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
+                Location location = p.getLocation();
+                for (int i = location.getBlockY(); i >= 0; --i) {
+                    location.setY(i);
+                    Block block = p.getWorld().getBlockAt(location);
+                    if (block.getType() != Material.END_PORTAL_FRAME) {
+                        block.setType(Material.AIR);
+                    }
+                }
+            });
         }
     }
 

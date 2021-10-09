@@ -158,7 +158,7 @@ public class EventsController {
                     entity.customName(Component.text("Espiritu Gelatinoso", TextColor.color(0xA0F0FF)));
                 }
             });
-            case ANVIL_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().spawnFallingBlock(p.getLocation().add(0, 3, 0), Material.ANVIL.createBlockData()));
+            case ANVIL_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> p.getWorld().getBlockAt(p.getLocation().add(0, 6, 0)).setType(Material.ANVIL));
             case COBWEB_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 List<int[]> locations = Arrays.asList(
                         new int[]{0, 0}, new int[]{1, 0}, new int[]{0, 1},
@@ -389,6 +389,11 @@ public class EventsController {
                 for (int i = 0; i < random.nextInt(3) + 1; ++i) {
                     p.getWorld().spawnEntity(p.getLocation()
                             .add(random.nextInt(3), 10, random.nextInt(3)), EntityType.PUFFERFISH);
+                }
+            }));
+            case ANVIL_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> Bukkit.getScheduler().runTask(ThirtySecondsToDie.getInstance(), () -> {
+                for (int i = 0; i < random.nextInt(3) + 1; ++i) {
+                    p.getWorld().getBlockAt(p.getLocation().add(random.nextInt(3), 6, random.nextInt(3))).setType(Material.ANVIL);
                 }
             }));
         }

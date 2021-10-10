@@ -423,6 +423,7 @@ public class EventsController {
             case DROWNED_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < 5; ++i) {
                     Drowned drowned = (Drowned) p.getWorld().spawnEntity(p.getLocation(), EntityType.DROWNED);
+                    drowned.getScoreboardTags().add("not_upgradable");
                     drowned.getEquipment().setItemInMainHand(new ItemStack(Material.TRIDENT));
                     drowned.setTarget(p);
                 }
@@ -430,6 +431,7 @@ public class EventsController {
             case SNIPER_EPIC -> Bukkit.getOnlinePlayers().forEach(p -> {
                 for (int i = 0; i < 4; ++i) {
                     Skeleton skeleton = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                    skeleton.getScoreboardTags().add("not_upgradable");
                     skeleton.customName(Component.text("Francotirador", TextColor.color(0x4066B8)));
                     ItemStack bow = new ItemStack(Material.BOW);
                     ItemMeta itemMeta = bow.getItemMeta();
@@ -574,6 +576,7 @@ public class EventsController {
             });
             case KNIGHT_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 WitherSkeleton witherSkeleton = (WitherSkeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER_SKELETON);
+                witherSkeleton.getScoreboardTags().add("not_upgradable");
                 witherSkeleton.customName(Component.text("Oscuridad Total", TextColor.color(0x4A4B4A)));
                 Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(100);
                 Objects.requireNonNull(witherSkeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.5f);
@@ -603,6 +606,7 @@ public class EventsController {
             });
             case CONTERSTINE_DIVINE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 Zombie zombie = (Zombie) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
+                zombie.getScoreboardTags().add("not_upgradable");
                 zombie.customName(Component.text("Conterstine", TextColor.color(0x37FF56)));
                 Objects.requireNonNull(zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(0.4f);
 

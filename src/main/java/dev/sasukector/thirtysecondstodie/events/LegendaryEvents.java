@@ -133,7 +133,9 @@ public class LegendaryEvents implements Listener {
         }
     }
 
-    public void setEquipment(EntityEquipment entityEquipment, EntityType entityType, int lvl) {
+    public void setEquipment(Entity entity, EntityEquipment entityEquipment, EntityType entityType, int lvl) {
+        if (entity.getScoreboardTags().contains("not_upgradable"))
+            return;
         switch (lvl) {
             case 1 -> {
                 entityEquipment.setHelmet(new ItemStack(Material.IRON_HELMET));
@@ -230,13 +232,13 @@ public class LegendaryEvents implements Listener {
             int lvlZombies = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_ZOMBIES_LEG);
             if (lvlZombies > 0) {
                 Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
-                        setEquipment(zombie.getEquipment(), EntityType.ZOMBIE, lvlZombies), 10L);
+                        setEquipment(zombie, zombie.getEquipment(), EntityType.ZOMBIE, lvlZombies), 10L);
             }
         } else if (event.getEntity() instanceof Skeleton skeleton) {
             int lvlSkeleton = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SKELETONS_LEG);
             if (lvlSkeleton > 0) {
                 Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
-                        setEquipment(skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
+                        setEquipment(skeleton, skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
             }
         } else if (event.getEntity() instanceof Spider spider) {
             int lvlSpider = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SPIDERS_LEG);

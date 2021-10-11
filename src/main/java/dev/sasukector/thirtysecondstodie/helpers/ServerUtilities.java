@@ -6,11 +6,18 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ServerUtilities {
 
@@ -96,5 +103,24 @@ public class ServerUtilities {
     public static char getCharFromString(String base) {
         int hex = Integer.parseInt(base, 16);
         return (char) hex;
+    }
+
+    public static void teleportPlayerToSafeHeight(Player player, Location location) {
+        List<Integer> ys = Stream.iterate(2, n -> n + 1).limit(100).collect(Collectors.toList());
+        Collections.shuffle(ys);
+        for (int y : ys) {
+            location.setY(y);
+            Block cBlock = location.getBlock();
+            Block tBlock = location.add(0, 1, 0).getBlock();
+            Block lBlock = location.add(0, -2, 0).getBlock();
+            if ((cBlock.getType() == Material.AIR || cBlock.getType() == Material.WATER) &&
+                    (tBlock.getType() == Material.AIR || tBlock.getType() == Material.WATER) &&
+                    (lBlock.getType().isSolid() || lBlock.getType() == Material.WATER)
+            ) {
+                location.setY(y);
+                player.teleport(location);
+                break;
+            }
+        }
     }
 }

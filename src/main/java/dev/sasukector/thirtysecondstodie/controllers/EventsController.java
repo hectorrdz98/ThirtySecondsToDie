@@ -254,22 +254,7 @@ public class EventsController {
             case RANDOM_TP_NORMAL -> Bukkit.getOnlinePlayers().forEach(p -> {
                 Location newLocation = p.getLocation();
                 newLocation.add(random.nextInt(20) - 10, 0, random.nextInt(20) - 10);
-                List<Integer> locations = Stream.iterate(2, n -> n + 1).limit(100).collect(Collectors.toList());
-                Collections.shuffle(locations);
-                for (int y : locations) {
-                    newLocation.setY(y);
-                    Block cBlock = newLocation.getBlock();
-                    Block tBlock = newLocation.add(0, 1, 0).getBlock();
-                    Block lBlock = newLocation.add(0, -2, 0).getBlock();
-                    if ((cBlock.getType() == Material.AIR || cBlock.getType() == Material.WATER) &&
-                            (tBlock.getType() == Material.AIR || tBlock.getType() == Material.WATER) &&
-                            (lBlock.getType().isSolid() || lBlock.getType() == Material.WATER)
-                    ) {
-                        newLocation.setY(y);
-                        p.teleport(newLocation);
-                        break;
-                    }
-                }
+                ServerUtilities.teleportPlayerToSafeHeight(p, newLocation);
             });
             case EFFECT_RARE -> Bukkit.getOnlinePlayers().forEach(p -> {
                 switch (random.nextInt(3)) {
@@ -502,7 +487,7 @@ public class EventsController {
             });
             case TP_LEG -> Bukkit.getOnlinePlayers().forEach(p -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 0));
-                p.teleport(new Location(ServerUtilities.getOverworld(), 0, 70, 0));
+                ServerUtilities.teleportPlayerToSafeHeight(p, new Location(ServerUtilities.getOverworld(), 0, 70, 0));
             });
             case TOTEM_LEG -> {
                 int currentValue = this.accEvents.get(EventType.TOTEM_LEG);

@@ -3,7 +3,6 @@ package dev.sasukector.thirtysecondstodie.commands;
 import dev.sasukector.thirtysecondstodie.controllers.GameController;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
@@ -15,10 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameCommand implements CommandExecutor, TabExecutor {
+public class GameCommand implements TabExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+            @NotNull String[] args) {
         if (sender instanceof Player player && player.isOp()) {
             if (args.length > 0) {
                 String option = args[0];
@@ -40,10 +40,11 @@ public class GameCommand implements CommandExecutor, TabExecutor {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
+            @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             if (args.length == 1) {
                 String partialItem = args[0];
                 StringUtil.copyPartialMatches(partialItem, validOptions(), completions);

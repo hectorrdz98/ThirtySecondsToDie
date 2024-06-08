@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 public class ServerUtilities {
 
-    private final static @Getter MiniMessage miniMessage = MiniMessage.get();
+    private final static @Getter MiniMessage miniMessage = MiniMessage.miniMessage();
 
     // Associate all world names
     private final static Map<String, String> worldsNames;
@@ -33,7 +33,7 @@ public class ServerUtilities {
     }
 
     public static Component getPluginNameColored() {
-        return miniMessage.parse("<bold><gradient:#DC3636:#8B1919>30 ☠ segundos</gradient></bold>");
+        return miniMessage.deserialize("<gradient:#DC3636:#8B1919>30 ☠ segundos</gradient>");
     }
 
     public static String getCategoryStyle(GameController.Category category) {
@@ -115,8 +115,7 @@ public class ServerUtilities {
             Block lBlock = location.add(0, -2, 0).getBlock();
             if ((cBlock.getType() == Material.AIR || cBlock.getType() == Material.WATER) &&
                     (tBlock.getType() == Material.AIR || tBlock.getType() == Material.WATER) &&
-                    (lBlock.getType().isSolid() || lBlock.getType() == Material.WATER)
-            ) {
+                    (lBlock.getType().isSolid() || lBlock.getType() == Material.WATER)) {
                 location.setY(y);
                 player.teleport(location);
                 break;

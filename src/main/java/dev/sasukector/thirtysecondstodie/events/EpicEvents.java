@@ -17,7 +17,8 @@ public class EpicEvents implements Listener {
 
     @EventHandler
     public void onRegainHealth(EntityRegainHealthEvent event) {
-        if (event.getEntity() instanceof Player && event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) {
+        if (event.getEntity() instanceof Player
+                && event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) {
             if (GameController.getInstance().getActiveEvents().stream()
                     .anyMatch(e -> e.getEventType() == EventsController.EventType.UHC_MODE_EPIC)) {
                 event.setCancelled(true);
@@ -35,9 +36,10 @@ public class EpicEvents implements Listener {
                 .anyMatch(e -> e.getEventType() == EventsController.EventType.FLOOR_LAVA_EPIC)) {
             Block block = event.getPlayer().getLocation().add(0, -1, 0).getBlock();
             if (block.getType() != Material.LAVA && block.getType() != Material.END_PORTAL_FRAME &&
-                block.getType() != Material.BEDROCK && block.getType() != Material.WATER &&
-                block.getType() != Material.AIR && block.getType() != Material.OBSIDIAN) {
-                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> block.setType(Material.LAVA), 10L);
+                    block.getType() != Material.BEDROCK && block.getType() != Material.WATER &&
+                    block.getType() != Material.AIR && block.getType() != Material.OBSIDIAN) {
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> block.setType(Material.LAVA),
+                        10L);
             }
         }
     }

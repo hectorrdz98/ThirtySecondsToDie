@@ -61,7 +61,8 @@ public class LegendaryEvents implements Listener {
             phantom.setVisualFire(false);
             phantom.setFireTicks(0);
         }
-        if (event.getEntity() instanceof Skeleton skeleton && skeleton.getScoreboardTags().contains("custom_skeleton") &&
+        if (event.getEntity() instanceof Skeleton skeleton && skeleton.getScoreboardTags().contains("custom_skeleton")
+                &&
                 (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK ||
                         event.getCause() == EntityDamageEvent.DamageCause.FIRE)) {
             event.setCancelled(true);
@@ -82,7 +83,8 @@ public class LegendaryEvents implements Listener {
                 .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
             event.setCancelled(true);
         } else {
-            int lvlRandom = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_RANDOM_LEG);
+            int lvlRandom = EventsController.getInstance().getAccEvents()
+                    .get(EventsController.EventType.BLOCKS_RANDOM_LEG);
             if (random.nextDouble() < (lvlRandom / 100f)) {
                 event.setCancelled(true);
                 Block block = event.getBlock();
@@ -98,7 +100,8 @@ public class LegendaryEvents implements Listener {
                     }
                 }
             } else {
-                int lvlExplode = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_EXPLODE_LEG);
+                int lvlExplode = EventsController.getInstance().getAccEvents()
+                        .get(EventsController.EventType.BLOCKS_EXPLODE_LEG);
                 if (random.nextDouble() < (lvlExplode / 100f)) {
                     Block block = event.getBlock();
                     block.getWorld().createExplosion(block.getLocation(), 3);
@@ -113,7 +116,8 @@ public class LegendaryEvents implements Listener {
                 .anyMatch(e -> e.getEventType() == EventsController.EventType.ADVENTURE_LEG)) {
             event.setCancelled(true);
         } else {
-            int lvlRandom = EventsController.getInstance().getAccEvents().get(EventsController.EventType.BLOCKS_RANDOM_LEG);
+            int lvlRandom = EventsController.getInstance().getAccEvents()
+                    .get(EventsController.EventType.BLOCKS_RANDOM_LEG);
             if (random.nextDouble() < (lvlRandom / 100f)) {
                 event.setCancelled(true);
                 Block block = event.getBlock();
@@ -145,38 +149,38 @@ public class LegendaryEvents implements Listener {
 
                 if (entityType == EntityType.ZOMBIE) {
                     ItemStack sword = new ItemStack(Material.IRON_SWORD);
-                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    sword.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
                     entityEquipment.setItemInMainHand(sword);
                 } else if (entityType == EntityType.SKELETON) {
                     ItemStack bow = new ItemStack(Material.BOW);
-                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    bow.addUnsafeEnchantment(Enchantment.POWER, 1);
                     entityEquipment.setItemInMainHand(bow);
                 }
             }
             case 2 -> {
                 ItemStack helmet = new ItemStack(Material.IRON_HELMET);
-                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
                 entityEquipment.setHelmet(helmet);
 
                 ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
-                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
                 entityEquipment.setChestplate(chestplate);
 
                 ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
-                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
                 entityEquipment.setLeggings(leggings);
 
                 ItemStack boots = new ItemStack(Material.IRON_BOOTS);
-                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
                 entityEquipment.setBoots(boots);
 
                 if (entityType == EntityType.ZOMBIE) {
                     ItemStack sword = new ItemStack(Material.IRON_SWORD);
-                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
+                    sword.addUnsafeEnchantment(Enchantment.SHARPNESS, 3);
                     entityEquipment.setItemInMainHand(sword);
                 } else if (entityType == EntityType.SKELETON) {
                     ItemStack bow = new ItemStack(Material.BOW);
-                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    bow.addUnsafeEnchantment(Enchantment.POWER, 1);
                     entityEquipment.setItemInMainHand(bow);
                 }
             }
@@ -188,38 +192,38 @@ public class LegendaryEvents implements Listener {
 
                 if (entityType == EntityType.ZOMBIE) {
                     ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    sword.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
                     entityEquipment.setItemInMainHand(sword);
                 } else if (entityType == EntityType.SKELETON) {
                     ItemStack bow = new ItemStack(Material.BOW);
-                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                    bow.addUnsafeEnchantment(Enchantment.POWER, 2);
                     entityEquipment.setItemInMainHand(bow);
                 }
             }
             default -> {
                 ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
-                helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                helmet.addUnsafeEnchantment(Enchantment.PROTECTION, lvl - 1);
                 entityEquipment.setHelmet(helmet);
 
                 ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
-                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                chestplate.addUnsafeEnchantment(Enchantment.PROTECTION, lvl - 1);
                 entityEquipment.setChestplate(chestplate);
 
                 ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
-                leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                leggings.addUnsafeEnchantment(Enchantment.PROTECTION, lvl - 1);
                 entityEquipment.setLeggings(leggings);
 
                 ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
-                boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, lvl - 1);
+                boots.addUnsafeEnchantment(Enchantment.PROTECTION, lvl - 1);
                 entityEquipment.setBoots(boots);
 
                 if (entityType == EntityType.ZOMBIE) {
                     ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-                    sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, lvl - 1);
+                    sword.addUnsafeEnchantment(Enchantment.SHARPNESS, lvl - 1);
                     entityEquipment.setItemInMainHand(sword);
                 } else if (entityType == EntityType.SKELETON) {
                     ItemStack bow = new ItemStack(Material.BOW);
-                    bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, lvl - 1);
+                    bow.addUnsafeEnchantment(Enchantment.POWER, lvl - 1);
                     entityEquipment.setItemInMainHand(bow);
                 }
             }
@@ -229,26 +233,29 @@ public class LegendaryEvents implements Listener {
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (event.getEntity() instanceof Zombie zombie) {
-            int lvlZombies = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_ZOMBIES_LEG);
+            int lvlZombies = EventsController.getInstance().getAccEvents()
+                    .get(EventsController.EventType.LV_ZOMBIES_LEG);
             if (lvlZombies > 0) {
-                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
-                        setEquipment(zombie, zombie.getEquipment(), EntityType.ZOMBIE, lvlZombies), 10L);
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(),
+                        () -> setEquipment(zombie, zombie.getEquipment(), EntityType.ZOMBIE, lvlZombies), 10L);
             }
         } else if (event.getEntity() instanceof Skeleton skeleton) {
-            int lvlSkeleton = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SKELETONS_LEG);
+            int lvlSkeleton = EventsController.getInstance().getAccEvents()
+                    .get(EventsController.EventType.LV_SKELETONS_LEG);
             if (lvlSkeleton > 0) {
-                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () ->
-                        setEquipment(skeleton, skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
+                Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(),
+                        () -> setEquipment(skeleton, skeleton.getEquipment(), EntityType.SKELETON, lvlSkeleton), 10L);
             }
         } else if (event.getEntity() instanceof Spider spider) {
-            int lvlSpider = EventsController.getInstance().getAccEvents().get(EventsController.EventType.LV_SPIDERS_LEG);
+            int lvlSpider = EventsController.getInstance().getAccEvents()
+                    .get(EventsController.EventType.LV_SPIDERS_LEG);
             if (lvlSpider > 0) {
                 Bukkit.getScheduler().runTaskLater(ThirtySecondsToDie.getInstance(), () -> {
                     spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, lvlSpider - 1));
                     if (lvlSpider >= 2)
-                        spider.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 0));
+                        spider.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 99999, 0));
                     if (lvlSpider >= 3)
-                        spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 99999, lvlSpider - 1));
+                        spider.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 99999, lvlSpider - 1));
                     if (lvlSpider >= 4)
                         spider.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
                 }, 10L);
@@ -266,9 +273,9 @@ public class LegendaryEvents implements Listener {
             enderman.setCarriedBlock(Bukkit.createBlockData(Material.OBSIDIAN));
             enderman.getEquipment().setBoots(bootsEnderman);
             enderman.customName(Component.text("El Vigilante", TextColor.color(0xA269A6)));
-            enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*60,1,true,true));
-            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20*20,1,true,true));
-            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,20*60,1,true,true));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20 * 60, 1, true, true));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 20, 1, true, true));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 60, 1, true, true));
             Optional<Entity> entity = enderman.getNearbyEntities(10, 10, 10).stream()
                     .filter(e -> e instanceof Player).findAny();
             if (entity.isPresent() && entity.get() instanceof LivingEntity livingEntity) {
@@ -280,17 +287,17 @@ public class LegendaryEvents implements Listener {
     @EventHandler
     public void dragonPhase(EnderDragonChangePhaseEvent event) {
         EnderDragon enderDragon = event.getEntity();
-        if(enderDragon.getWorld().getPlayers().size() == 0) {
+        if (enderDragon.getWorld().getPlayers().size() == 0) {
             return;
         }
-        if(event.getCurrentPhase() == null) {
+        if (event.getCurrentPhase() == null) {
             return;
         }
-        if(enderDragon.getCustomName() == null) {
+        if (enderDragon.customName() == null) {
             return;
         }
-        if(event.getCurrentPhase().equals(EnderDragon.Phase.LAND_ON_PORTAL)) {
-            for(int i = 0; i < 10; ++i) {
+        if (event.getCurrentPhase().equals(EnderDragon.Phase.LAND_ON_PORTAL)) {
+            for (int i = 0; i < Bukkit.getOnlinePlayers().size() * 2; ++i) {
                 enderDragon.getWorld().spawnEntity(enderDragon.getWorld()
                         .getHighestBlockAt(enderDragon.getLocation().add(random.nextInt(5), 0, random.nextInt(5)))
                         .getLocation(), EntityType.ENDERMAN);
@@ -302,7 +309,7 @@ public class LegendaryEvents implements Listener {
             ItemStack bootsBrute = new ItemStack(Material.NETHERITE_BOOTS);
             ItemStack handBrute = new ItemStack(Material.NETHERITE_AXE);
 
-            for(int i = 0; i < 7; ++i) {
+            for (int i = 0; i < Bukkit.getOnlinePlayers().size() * 4; ++i) {
                 Zombie zombie = (Zombie) enderDragon.getWorld().spawnEntity(enderDragon.getWorld()
                         .getHighestBlockAt(enderDragon.getLocation().add(random.nextInt(5), 0, random.nextInt(5)))
                         .getLocation(), EntityType.ZOMBIE);
@@ -312,9 +319,9 @@ public class LegendaryEvents implements Listener {
                 zombie.getEquipment().setChestplate(bodyBrute);
                 zombie.getEquipment().setLeggings(legsBrute);
                 zombie.getEquipment().setBoots(bootsBrute);
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,20*60,1));
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,99999,3));
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,99999,3));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 60, 1));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 99999, 1));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 3));
                 Optional<Entity> entity = zombie.getNearbyEntities(10, 10, 10).stream()
                         .filter(e -> e instanceof Player).findAny();
                 if (entity.isPresent() && entity.get() instanceof LivingEntity livingEntity) {
@@ -322,7 +329,7 @@ public class LegendaryEvents implements Listener {
                 }
             }
 
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < Bukkit.getOnlinePlayers().size() * 2; ++i) {
                 Ghast ghast = (Ghast) enderDragon.getWorld().spawnEntity(enderDragon.getLocation()
                         .add(random.nextInt(10), 0, random.nextInt(10)), EntityType.GHAST);
                 ghast.getScoreboardTags().add("custom_ghast");

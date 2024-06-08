@@ -1,7 +1,7 @@
 name: ThirtySecondsToDie
 version: '${project.version}'
 main: dev.sasukector.thirtysecondstodie.ThirtySecondsToDie
-api-version: 1.17
+api-version: 1.20
 authors: [ Sasukector ]
 description: This is the core plugin for ThirtySecondsToDie
 website: https://sasukector.dev

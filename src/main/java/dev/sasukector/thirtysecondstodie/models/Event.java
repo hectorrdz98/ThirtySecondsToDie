@@ -23,7 +23,8 @@ public class Event {
     }
 
     public void announce() {
-        ServerUtilities.sendBroadcastMessage("Ha tocado el evento " + ServerUtilities.getCategoryColor(this.category) + "§l" + this.name);
+        ServerUtilities.sendBroadcastMessage(
+                "Ha tocado el evento " + ServerUtilities.getCategoryColor(this.category) + "§l" + this.name);
     }
 
 }

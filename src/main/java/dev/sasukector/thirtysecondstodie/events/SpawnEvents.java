@@ -17,8 +17,7 @@ public class SpawnEvents implements Listener {
         BoardController.getInstance().newPlayerBoard(player);
         event.joinMessage(
                 Component.text("+ ", TextColor.color(0x84E3A4))
-                        .append(Component.text(player.getName(), TextColor.color(0x84E3A4)))
-        );
+                        .append(Component.text(player.getName(), TextColor.color(0x84E3A4))));
     }
 
     @EventHandler
@@ -27,8 +26,7 @@ public class SpawnEvents implements Listener {
         BoardController.getInstance().removePlayerBoard(player);
         event.quitMessage(
                 Component.text("- ", TextColor.color(0xE38486))
-                        .append(Component.text(player.getName(), TextColor.color(0xE38486)))
-        );
+                        .append(Component.text(player.getName(), TextColor.color(0xE38486))));
     }
 
 }

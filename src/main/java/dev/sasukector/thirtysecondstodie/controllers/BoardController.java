@@ -1,15 +1,21 @@
 package dev.sasukector.thirtysecondstodie.controllers;
 
 import dev.sasukector.thirtysecondstodie.ThirtySecondsToDie;
+import dev.sasukector.thirtysecondstodie.controllers.EventsController.EventType;
 import dev.sasukector.thirtysecondstodie.helpers.FastBoard;
 import dev.sasukector.thirtysecondstodie.helpers.ServerUtilities;
 import dev.sasukector.thirtysecondstodie.models.Event;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class BoardController {
 
@@ -52,13 +58,14 @@ public class BoardController {
                 lines.add("Muertes: §c" + player.getStatistic(Statistic.DEATHS));
                 lines.add("");
                 lines.add("Próximo evento: §6" + GameController.getInstance().getRemainingSeconds() + "s");
-                lines.add("Categoría: " + ServerUtilities.getCategoryStyle(GameController.getInstance().getCurrentCategory()));
+                lines.add("Categoría: "
+                        + ServerUtilities.getCategoryStyle(GameController.getInstance().getCurrentCategory()));
                 if (GameController.getInstance().getActiveEvents().size() > 0) {
                     lines.add("");
                     lines.add("Eventos activos: ");
                     for (Event event : GameController.getInstance().getActiveEvents().stream()
                             .sorted(Comparator.comparingInt(Event::getMissingTime))
-                            .limit(3).collect(Collectors.toList())) {
+                            .limit(3).toList()) {
                         lines.add(ServerUtilities.getCategoryColor(event.getCategory()) + event.getName() + " §7" +
                                 event.getMissingTime() + "s");
                     }
@@ -70,7 +77,8 @@ public class BoardController {
                     StringBuilder modifications = new StringBuilder();
                     int currentCount = 0;
                     boolean setTitle = false;
-                    for (Map.Entry entry : EventsController.getInstance().getAccEvents().entrySet()) {
+                    for (Map.Entry<EventType, Integer> entry : EventsController.getInstance().getAccEvents()
+                            .entrySet()) {
                         EventsController.EventType eventType = (EventsController.EventType) entry.getKey();
                         int value = (int) entry.getValue();
                         if (value > 0) {
@@ -105,8 +113,7 @@ public class BoardController {
                         "Jugador: §6" + player.getName(),
                         "Muertes: §c" + player.getStatistic(Statistic.DEATHS),
                         "",
-                        "§cEl juego está en espera"
-                );
+                        "§cEl juego está en espera");
             }
         });
     }

@@ -12,8 +12,8 @@ public class RareEvents implements Listener {
 
     @EventHandler
     public void blockChestInteract(PlayerInteractEvent event) {
-        if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if(event.getClickedBlock() != null && event.getClickedBlock().getState() instanceof InventoryHolder) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock() != null && event.getClickedBlock().getState() instanceof InventoryHolder) {
                 if (GameController.getInstance().getActiveEvents().stream()
                         .anyMatch(e -> e.getEventType() == EventsController.EventType.NO_CHESTS_RARE)) {
                     event.setCancelled(true);
